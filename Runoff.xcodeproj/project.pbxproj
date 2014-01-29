@@ -114,8 +114,6 @@
 		C18DEA3018987FDB007BAF8E /* Runoff */ = {
 			isa = PBXGroup;
 			children = (
-				C18DEA3918987FDB007BAF8E /* RunoffAppDelegate.h */,
-				C18DEA3A18987FDB007BAF8E /* RunoffAppDelegate.m */,
 				C18DEA3C18987FDB007BAF8E /* Main_iPhone.storyboard */,
 				C18DEA3F18987FDB007BAF8E /* Main_iPad.storyboard */,
 				C18DEA4218987FDB007BAF8E /* RunoffViewController.h */,
@@ -129,6 +127,8 @@
 		C18DEA3118987FDB007BAF8E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C18DEA3918987FDB007BAF8E /* RunoffAppDelegate.h */,
+				C18DEA3A18987FDB007BAF8E /* RunoffAppDelegate.m */,
 				C18DEA3218987FDB007BAF8E /* Runoff-Info.plist */,
 				C18DEA3318987FDB007BAF8E /* InfoPlist.strings */,
 				C18DEA3618987FDB007BAF8E /* main.m */,
@@ -393,6 +393,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Runoff/Runoff-Prefix.pch";
 				INFOPLIST_FILE = "Runoff/Runoff-Info.plist";
@@ -406,6 +407,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Runoff/Runoff-Prefix.pch";
 				INFOPLIST_FILE = "Runoff/Runoff-Info.plist";
