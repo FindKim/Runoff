@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A821C4B1898901100C65FDB /* Data.json in Resources */ = {isa = PBXBuildFile; fileRef = 0A821C4A1898901100C65FDB /* Data.json */; };
 		C18DEA2B18987FDB007BAF8E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18DEA2A18987FDB007BAF8E /* Foundation.framework */; };
 		C18DEA2D18987FDB007BAF8E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18DEA2C18987FDB007BAF8E /* CoreGraphics.framework */; };
 		C18DEA2F18987FDB007BAF8E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18DEA2E18987FDB007BAF8E /* UIKit.framework */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A821C4A1898901100C65FDB /* Data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Data.json; sourceTree = "<group>"; };
 		C18DEA2718987FDB007BAF8E /* Runoff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runoff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C18DEA2A18987FDB007BAF8E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C18DEA2C18987FDB007BAF8E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -84,6 +86,7 @@
 		C18DEA1E18987FDB007BAF8E = {
 			isa = PBXGroup;
 			children = (
+				0A821C4A1898901100C65FDB /* Data.json */,
 				C18DEA3018987FDB007BAF8E /* Runoff */,
 				C18DEA5218987FDB007BAF8E /* RunoffTests */,
 				C18DEA2918987FDB007BAF8E /* Frameworks */,
@@ -232,6 +235,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A821C4B1898901100C65FDB /* Data.json in Resources */,
 				C18DEA4118987FDB007BAF8E /* Main_iPad.storyboard in Resources */,
 				C18DEA4618987FDB007BAF8E /* Images.xcassets in Resources */,
 				C18DEA3E18987FDB007BAF8E /* Main_iPhone.storyboard in Resources */,
@@ -477,6 +481,7 @@
 				C18DEA5E18987FDB007BAF8E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C18DEA5F18987FDB007BAF8E /* Build configuration list for PBXNativeTarget "RunoffTests" */ = {
 			isa = XCConfigurationList;
@@ -485,6 +490,7 @@
 				C18DEA6118987FDB007BAF8E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
