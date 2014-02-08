@@ -10,4 +10,9 @@
 
 @interface RunoffCityViewController : UIViewController
 
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)sender;
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)sender withView:(UIView *)zoomView
+                        atScale:(CGFloat)scale;
+
 @end
