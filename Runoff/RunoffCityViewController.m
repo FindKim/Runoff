@@ -66,19 +66,25 @@
 - (void)scrollViewDidEndZooming:(UIScrollView *)sender withView:(UIView *)zoomView atScale:(CGFloat)scale {
 
 }
+- (void)placeBiofilterAtPoint:(CGPoint)mypoint{
+    UIImage * biofilterImage = [UIImage imageNamed:@"Biofilter"];
+    UIImageView * biofilterView = [[UIImageView alloc] initWithImage:biofilterImage];
+    [self.container addSubview:biofilterView];
+    biofilterView.frame = CGRectMake(mypoint.x, mypoint.y, 20, 20);
+    biofilterView.center = mypoint;
+}
+
+
 - (IBAction)mapDoubleTap:(UITapGestureRecognizer *)sender {
-    CGPoint mypoint = [sender locationInView:self.scrollViewCityGrid];
+    CGPoint mypoint = [sender locationInView:self.container];
     //determines point at which the user double taps the screen
     NSLog(@"x = %f,y = %f", mypoint.x, mypoint.y);
-    CGFloat scale = [self.scrollViewCityGrid zoomScale];
-    //determines scale at which the user has zoomed
-    NSLog(@"scale = %f", scale);
-    CGPoint offset = [self.scrollViewCityGrid contentOffset];
-    //determines the offset of the scrollView
-    NSLog(@"offset x = %f, offset y = %f", offset.x, offset.y);
-    float col = (8.0/1200.0)*(offset.y + scale*mypoint.y);
-    float row = (8.0/1200.0)*(offset.x + scale*mypoint.x);
+    float col = (8.0/320.0)*(mypoint.y);
+    float row = (8.0/320.0)*(mypoint.x);
     NSLog(@"col = %f, row = %f", col, row);
+    if(YES){
+        [self placeBiofilterAtPoint:mypoint];
+    }
     //Scale factor S
     //Iy = inset y
     //Ix = inset x
