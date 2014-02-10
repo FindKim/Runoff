@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollViewCityGrid;
 @property (nonatomic, strong) UIImage *cityImage; //_cityImage instance variable
 @property (nonatomic, strong) UIImageView *cityImageView;
+@property (nonatomic, strong) UIView *container;
 
 @end
 
@@ -37,14 +38,19 @@
      */
     self.cityImage = [UIImage imageNamed:@"City1"];
     self.cityImageView = [[UIImageView alloc] initWithImage:self.cityImage];
-    self.cityImageView.frame = CGRectMake(0, 0, self.cityImage.size.width, self.cityImage.size.height);
+
+    self.cityImageView.frame = CGRectMake(0, 0, 320, 320);
+    self.container = [[UIView alloc] initWithFrame:self.cityImageView.frame];
+                      //self.cityImage.size.width, self.cityImage.size.height);
     // 320 scrollview width
-    [self.scrollViewCityGrid addSubview:self.cityImageView];
-    self.scrollViewCityGrid.contentSize = self.cityImageView.bounds.size;
+    [self.scrollViewCityGrid addSubview:self.container];
+    [self.container addSubview:self.cityImageView];
+    self.scrollViewCityGrid.contentSize = self.container.bounds.size;
 
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
     self.scrollViewCityGrid.maximumZoomScale = 2.0; // twice its normal size
     self.scrollViewCityGrid.delegate = self;
+    self.scrollViewCityGrid.ZoomBouncing = NO;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -53,7 +59,8 @@
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)sender {
-  return self.cityImageView;
+//  return self.cityImageView;
+    return self.container;
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)sender withView:(UIView *)zoomView atScale:(CGFloat)scale {
