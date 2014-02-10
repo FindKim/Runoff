@@ -17,4 +17,47 @@
 
 @implementation RunoffCityViewController
 
+//property builds an instance variable, a setter, a getter
+
+-(UIImage *)cityImage
+{
+    if (!_cityImage) {
+        _cityImage = [[UIImage alloc] init];
+    }
+    return _cityImage;
+}
+
+- (void)scrollViewSetUp {
+    /*
+     set image to image view
+     set image view size to image
+     set image view as subview of scroll view
+     set bounds of scroll view to size of image
+     set zoom limits
+     */
+    self.cityImage = [UIImage imageNamed:@"City1"];
+    self.cityImageView = [[UIImageView alloc] initWithImage:self.cityImage];
+    self.cityImageView.frame = CGRectMake(0, 0, self.cityImage.size.width, self.cityImage.size.height);
+    // 320 scrollview width
+    [self.scrollViewCityGrid addSubview:self.cityImageView];
+    self.scrollViewCityGrid.contentSize = self.cityImageView.bounds.size;
+
+    self.scrollViewCityGrid.minimumZoomScale = 1.0;
+    self.scrollViewCityGrid.maximumZoomScale = 2.0; // twice its normal size
+    self.scrollViewCityGrid.delegate = self;
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [self scrollViewSetUp];
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)sender {
+  return self.cityImageView;
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)sender withView:(UIView *)zoomView atScale:(CGFloat)scale {
+    
+}
+
 @end
