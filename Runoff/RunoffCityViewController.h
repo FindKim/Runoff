@@ -16,5 +16,3 @@
                         atScale:(CGFloat)scale;
 
 @end
-
-//delete this comment
