@@ -50,7 +50,7 @@
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
     self.scrollViewCityGrid.maximumZoomScale = 2.0; // twice its normal size
     self.scrollViewCityGrid.delegate = self;
-    self.scrollViewCityGrid.ZoomBouncing = NO;
+//    self.scrollViewCityGrid.ZoomBouncing = NO;
 }
 
 - (void)viewDidLayoutSubviews {
