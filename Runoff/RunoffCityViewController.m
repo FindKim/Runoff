@@ -8,8 +8,10 @@
 
 #import "RunoffCityViewController.h"
 
-@interface RunoffCityViewController ()
+@interface RunoffCityViewController () <UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollViewCityGrid;
+@property (nonatomic, strong) UIImage *cityImage; //_cityImage instance variable
+@property (nonatomic, strong) UIImageView *cityImageView;
 
 @end
 
