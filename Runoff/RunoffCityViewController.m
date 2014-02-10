@@ -38,10 +38,10 @@
      */
     self.cityImage = [UIImage imageNamed:@"City1"];
     self.cityImageView = [[UIImageView alloc] initWithImage:self.cityImage];
-
-    self.cityImageView.frame = CGRectMake(0, 0, 320, 320);
+    self.cityImageView.frame = CGRectMake(0, 0, self.scrollViewCityGrid.bounds.size.width, self.scrollViewCityGrid.bounds.size.width);
+        // 320 = width of scrollView
+        // 320 = height of image (square)
     self.container = [[UIView alloc] initWithFrame:self.cityImageView.frame];
-                      //self.cityImage.size.width, self.cityImage.size.height);
     // 320 scrollview width
     [self.scrollViewCityGrid addSubview:self.container];
     [self.container addSubview:self.cityImageView];
@@ -50,7 +50,6 @@
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
     self.scrollViewCityGrid.maximumZoomScale = 2.0; // twice its normal size
     self.scrollViewCityGrid.delegate = self;
-//    self.scrollViewCityGrid.ZoomBouncing = NO;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -59,7 +58,6 @@
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)sender {
-//  return self.cityImageView;
     return self.container;
 }
 
