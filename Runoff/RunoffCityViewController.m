@@ -48,7 +48,7 @@
     self.scrollViewCityGrid.contentSize = self.container.bounds.size;
 
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
-    self.scrollViewCityGrid.maximumZoomScale = 2.0; // twice its normal size
+    self.scrollViewCityGrid.maximumZoomScale = 4.0; // twice its normal size
     self.scrollViewCityGrid.delegate = self;
 }
 
@@ -62,8 +62,8 @@
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)sender withView:(UIView *)zoomView atScale:(CGFloat)scale {
-
 }
+
 - (void)placeBiofilterAtPoint:(CGPoint)mypoint{
     UIImage * biofilterImage = [UIImage imageNamed:@"Biofilter"];
     UIImageView * biofilterView = [[UIImageView alloc] initWithImage:biofilterImage];
