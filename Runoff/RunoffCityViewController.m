@@ -57,7 +57,26 @@
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)sender withView:(UIView *)zoomView atScale:(CGFloat)scale {
+
+}
+- (IBAction)mapDoubleTap:(UITapGestureRecognizer *)sender {
+    CGPoint mypoint = [sender locationInView:self.scrollViewCityGrid];
+    //determines point at which the user double taps the screen
+    NSLog(@"x = %f,y = %f", mypoint.x, mypoint.y);
+    CGFloat scale = [self.scrollViewCityGrid zoomScale];
+    //determines scale at which the user has zoomed
+    NSLog(@"scale = %f", scale);
+    CGPoint offset = [self.scrollViewCityGrid contentOffset];
+    //determines the offset of the scrollView
+    NSLog(@"offset x = %f, offset y = %f", offset.x, offset.y);
     
+    //Scale factor S
+    //Iy = inset y
+    //Ix = inset x
+    //1200 points down and across
+    //8 units down and across
+    //column = (8/1200)(Iy + S*y)
+    //row = (8/1200)(Ix + S*x)
 }
 
 @end
