@@ -69,7 +69,9 @@
     CGPoint offset = [self.scrollViewCityGrid contentOffset];
     //determines the offset of the scrollView
     NSLog(@"offset x = %f, offset y = %f", offset.x, offset.y);
-    
+    float col = (8.0/1200.0)*(offset.y + scale*mypoint.y);
+    float row = (8.0/1200.0)*(offset.x + scale*mypoint.x);
+    NSLog(@"col = %f, row = %f", col, row);
     //Scale factor S
     //Iy = inset y
     //Ix = inset x
