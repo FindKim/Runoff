@@ -9,6 +9,7 @@
 #import "RunoffCityViewController.h"
 
 @interface RunoffCityViewController ()
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollViewCityGrid;
 
 @end
 
