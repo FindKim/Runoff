@@ -223,6 +223,12 @@
                                     <outletCollection property="gestureRecognizers" destination="XNc-Kj-tdf" appends="YES" id="ryM-dH-uJm"/>
                                 </connections>
                             </scrollView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="count: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f26-X5-gR2">
+                                <rect key="frame" x="58" y="490" width="63" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.85098046064376831" green="0.93725496530532837" blue="0.90196084976196289" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
@@ -248,6 +254,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="ZqU-Wi-CEa"/>
                     <connections>
+                        <outlet property="countLabel" destination="f26-X5-gR2" id="NbH-CO-mSI"/>
                         <outlet property="scrollViewCityGrid" destination="4pA-Gb-O3S" id="YET-Gx-o1A"/>
                     </connections>
                 </viewController>
