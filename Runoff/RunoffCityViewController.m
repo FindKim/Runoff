@@ -130,26 +130,31 @@
     float row = (8.0/320.0)*(mypoint.x);
     
     NSLog(@"col = %f, row = %f", col, row);
-    
-    if(self.biofilterCount<5){
+    if(self.biofilterCount<10){
         
         for (UIView *view in self.container.subviews) {
+            NSLog([self point:mypoint isonRect:view.frame] ? @"YES":@"NO");
+                
+            NSLog(@"inforloop");
             
             if(view != self.cityImageView) {
                 
 //                CGPoint pt = [mypoint locationInView:self.container];
 //                view.frame;
-                if([self point:mypoint isonRect:self.container.bounds]) {
-                    
+                NSLog(@"in here?");
+                NSLog([self point:mypoint isonRect:view.bounds] ? @"YES":@"NO");
+                if([self point:mypoint isonRect:view.frame]) {
+                    NSLog(@"removing?");
                     [view removeFromSuperview];
                     
                 }
                 
             }
-            
+
         }
-    
-        [self placeBiofilterAtPoint:mypoint];
+                [self placeBiofilterAtPoint:mypoint];
+
+        
         self.biofilterCount++;
         NSLog(@"count = %d", self.biofilterCount);
     }
