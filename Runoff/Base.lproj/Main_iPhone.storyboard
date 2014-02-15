@@ -190,6 +190,9 @@
                                 <state key="normal" image="Biofilter">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="biofilterButton:" destination="C7J-KV-fVQ" eventType="touchUpInside" id="HF7-Fi-aDP"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GNz-37-Aat">
                                 <rect key="frame" x="20" y="490" width="70" height="70"/>
@@ -202,8 +205,11 @@
                                 <state key="normal" image="Reset">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="resetButton:" destination="C7J-KV-fVQ" eventType="touchUpInside" id="llk-Lo-xcV"/>
+                                </connections>
                             </button>
-                            <button opaque="NO" contentMode="top" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yFF-8L-Vjn">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yFF-8L-Vjn">
                                 <rect key="frame" x="230" y="490" width="70" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -224,7 +230,7 @@
                                 </connections>
                             </scrollView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="count: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f26-X5-gR2">
-                                <rect key="frame" x="58" y="490" width="63" height="21"/>
+                                <rect key="frame" x="54" y="490" width="98" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
@@ -288,7 +294,7 @@
     </scenes>
     <resources>
         <image name="Arrows" width="100" height="100"/>
-        <image name="Biofilter" width="100" height="100"/>
+        <image name="Biofilter" width="200" height="200"/>
         <image name="EiE Logo_small" width="957" height="365"/>
         <image name="Rain" width="100" height="100"/>
         <image name="Reset" width="100" height="100"/>

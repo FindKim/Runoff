@@ -26,6 +26,7 @@
 		C18DEA66189D9D31007BAF8E /* RunoffMainMenueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C18DEA65189D9D31007BAF8E /* RunoffMainMenueViewController.m */; };
 		C18DEA69189D9DB5007BAF8E /* RunoffSelectCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C18DEA68189D9DB5007BAF8E /* RunoffSelectCityViewController.m */; };
 		C18DEA6C189D9E13007BAF8E /* RunoffCityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C18DEA6B189D9E13007BAF8E /* RunoffCityViewController.m */; };
+		C1B4EB6418B009600088FDAD /* CustomBiofilterButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C1B4EB6318B009600088FDAD /* CustomBiofilterButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,8 @@
 		C18DEA68189D9DB5007BAF8E /* RunoffSelectCityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RunoffSelectCityViewController.m; sourceTree = "<group>"; };
 		C18DEA6A189D9E13007BAF8E /* RunoffCityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunoffCityViewController.h; sourceTree = "<group>"; };
 		C18DEA6B189D9E13007BAF8E /* RunoffCityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RunoffCityViewController.m; sourceTree = "<group>"; };
+		C1B4EB6218B009600088FDAD /* CustomBiofilterButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomBiofilterButton.h; sourceTree = "<group>"; };
+		C1B4EB6318B009600088FDAD /* CustomBiofilterButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomBiofilterButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +139,8 @@
 			isa = PBXGroup;
 			children = (
 				C18DEA3C18987FDB007BAF8E /* Main_iPhone.storyboard */,
+				C1B4EB6218B009600088FDAD /* CustomBiofilterButton.h */,
+				C1B4EB6318B009600088FDAD /* CustomBiofilterButton.m */,
 				C18DEA6A189D9E13007BAF8E /* RunoffCityViewController.h */,
 				C18DEA6B189D9E13007BAF8E /* RunoffCityViewController.m */,
 				C18DEA67189D9DB5007BAF8E /* RunoffSelectCityViewController.h */,
@@ -291,6 +296,7 @@
 				C18DEA4418987FDB007BAF8E /* RunoffViewController.m in Sources */,
 				C18DEA6C189D9E13007BAF8E /* RunoffCityViewController.m in Sources */,
 				C18DEA3B18987FDB007BAF8E /* RunoffAppDelegate.m in Sources */,
+				C1B4EB6418B009600088FDAD /* CustomBiofilterButton.m in Sources */,
 				C18DEA3718987FDB007BAF8E /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -15,8 +15,12 @@
 @property (nonatomic, strong) UIView *container;
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;
 @property (nonatomic) int biofilterCount;
-//@property (nonatomic, strong) NSArray *biofilterArray;
-//@property (nonatomic, strong) UIImage *biofilterImage;
+@property (nonatomic) int swapBiofilter; // 0 = leaf; 1 = sprout;
+
+- (IBAction)resetButton:(UIButton *)sender;
+
+
+- (IBAction)biofilterButton:(UIButton *)sender;
 
 
 @end
@@ -69,36 +73,72 @@
 - (void)scrollViewDidEndZooming:(UIScrollView *)sender withView:(UIView *)zoomView atScale:(CGFloat)scale {
 }
 
-- (void)setBiofilterImage:(UIImage *)biofilterImage {
-    self.biofilterImage = [UIImage imageNamed:@"Biofilter"];
+- (void)setBiofilterImage1:(UIImage *)biofilterImage1 {
+    self.biofilterImage1 = [UIImage imageNamed:@"Biofilter"];
 }
 
-//- (void)setBiofilterArray:(NSArray *)biofilterArray {
-//    self.biofilterArray = [NSArray arrayWithObjects:
-//                            [UIImage imageNamed:@"Biofilter"],
-//                            [UIImage imageNamed:@"Biofilter"],
-//                            [UIImage imageNamed:@"Biofilter"],
-//                            nil];
-//}
+- (void)setBiofilterImage2:(UIImage *)biofilterImage2 {
+    self.biofilterImage2 = [UIImage imageNamed:@"Biofilter2"];
+}
+
+
+- (IBAction)resetButton:(UIButton *)sender {
+    
+    // Resets biofilter count to 0
+    while (self.biofilterCount > 0) {
+        self.biofilterCount--;  // resets count to 0
+    }
+    
+    // Removes all subviews
+    for (UIView *subview in self.container.subviews) {
+        [subview removeFromSuperview];
+    }
+    
+    // Adds cityImageView back
+    [self.container addSubview:self.cityImageView];
+}
+
+- (IBAction)biofilterButton:(UIButton *)sender {
+        
+    UIImage * biofilterImage1 = [UIImage imageNamed:@"Biofilter"];
+    UIImage * biofilterImage2 = [UIImage imageNamed:@"Biofilter2"];
+    
+    
+    // Switches button image on touch; default: leaf, selected: sprout
+    if(sender.selected == NO) {
+        [sender setImage:biofilterImage2
+                forState:UIControlStateSelected];
+        self.swapBiofilter++;
+    } else if(sender.selected == YES) {
+        [sender setImage:biofilterImage1
+                forState:UIControlStateNormal];
+        self.swapBiofilter--;
+    }
+
+    sender.selected = !sender.selected;
+
+}
 
 
 - (void)placeBiofilterAtPoint:(CGPoint)mypoint{
-    UIImage * biofilterImage = [UIImage imageNamed:@"Biofilter"];
-    UIImageView * biofilterView = [[UIImageView alloc] initWithImage:biofilterImage];
+    
+    UIImage * biofilterImage1 = [UIImage imageNamed:@"Biofilter"];
+    UIImage * biofilterImage2 = [UIImage imageNamed:@"Biofilter2"];
+    
+    UIImageView * biofilterView;
+    
+    if (self.swapBiofilter == 0) { // places leaf at mypoint
+        biofilterView = [[UIImageView alloc] initWithImage:biofilterImage1];
+    } else if (self.swapBiofilter == 1) { // places sprout at mypoint
+        biofilterView = [[UIImageView alloc] initWithImage:biofilterImage2];
+    }
+    
     [self.container addSubview:biofilterView];
     biofilterView.frame = CGRectMake(mypoint.x, mypoint.y, 20, 20);
     biofilterView.center = mypoint;
-    // trying to make image recognize touch gestures to double tap to remove image
-//    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapGestureCaptured:)];
-//    [biofilterView addGestureRecognizer:doubleTap];
-//    [biofilterView setMultipleTouchEnabled:YES];
-//    [biofilterView setUserInteractionEnabled:YES];
+
 }
-/*
-- (void)doubleTapGestureCaptured:(UITapGestureRecognizer *)gesture {
-    self.biofilterView = [gesture.view hitTest:gesture locationInView:gesture.view withEvent:nil];
-}
-*/
+
 - (void)setBiofilterCount:(int)biofilterCount {
     _biofilterCount = biofilterCount;
     self.countLabel.text = [NSString stringWithFormat:@"count: %d", self.biofilterCount];
@@ -108,14 +148,13 @@
 - (BOOL) point:(CGPoint) pt isonRect:(CGRect)rpt {
     if (pt.x >= rpt.origin.x && pt.x <= rpt.size.width + rpt.origin.x) {
         // within x bounds
-        if (pt.y >= rpt.origin.y && pt.y <= rpt.size.height + rpt.origin.y) {
+        if (pt.y > rpt.origin.y && pt.y < rpt.size.height + rpt.origin.y) {
             // within y bounds
             return YES;
         }
     }
     return NO;
 }
-
 
 // Needs to delete biofilter within range of nearest biofilter
 
@@ -130,32 +169,36 @@
     float row = (8.0/320.0)*(mypoint.x);
     
     NSLog(@"col = %f, row = %f", col, row);
-    if(self.biofilterCount<10){
+    
+    if(self.biofilterCount<20){
         
+        int deleted = 0;    // If deleted = 1, don't add
+        
+        // Loops through all subviews for existing biofilters
         for (UIView *view in self.container.subviews) {
-            NSLog([self point:mypoint isonRect:view.frame] ? @"YES":@"NO");
-                
-            NSLog(@"inforloop");
             
-            if(view != self.cityImageView) {
-                
-//                CGPoint pt = [mypoint locationInView:self.container];
-//                view.frame;
-                NSLog(@"in here?");
+            if(view != self.cityImageView) {    // Ignores cityView
+
                 NSLog([self point:mypoint isonRect:view.bounds] ? @"YES":@"NO");
-                if([self point:mypoint isonRect:view.frame]) {
+                
+                if([self point:mypoint isonRect:view.bounds]){
+                    
                     NSLog(@"removing?");
                     [view removeFromSuperview];
+                    self.biofilterCount--;
+                    deleted = 1;
                     
                 }
-                
             }
-
         }
-                [self placeBiofilterAtPoint:mypoint];
-
         
-        self.biofilterCount++;
+        if(deleted == 0){
+            
+            [self placeBiofilterAtPoint:mypoint];
+            self.biofilterCount++;
+            
+        }
+
         NSLog(@"count = %d", self.biofilterCount);
     }
     //Scale factor S
@@ -166,7 +209,7 @@
     //column = (8/1200)(Iy + S*y)
     //row = (8/1200)(Ix + S*x)
 }
-
-
+    //                CGPoint pt = [mypoint locationInView:self.container];
+    //                view.frame;
 
 @end
