@@ -179,6 +179,9 @@
                                 <state key="normal" image="Arrows">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="arrowButton:" destination="C7J-KV-fVQ" eventType="touchUpInside" id="x8A-oC-1FY"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jCs-yC-rij">
                                 <rect key="frame" x="90" y="490" width="70" height="70"/>

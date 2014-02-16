@@ -12,16 +12,16 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollViewCityGrid;
 @property (nonatomic, strong) UIImage *cityImage; //_cityImage instance variable
 @property (nonatomic, strong) UIImageView *cityImageView;
+@property (nonatomic, strong) UIImage *cityArrowGrid;
+@property (nonatomic, strong) UIImageView *cityArrowGridView;
 @property (nonatomic, strong) UIView *container;
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;
 @property (nonatomic) int biofilterCount;
 @property (nonatomic) int swapBiofilter; // 0 = leaf; 1 = sprout;
 
 - (IBAction)resetButton:(UIButton *)sender;
-
-
 - (IBAction)biofilterButton:(UIButton *)sender;
-
+- (IBAction)arrowButton:(UIButton *)sender;
 
 @end
 
@@ -47,13 +47,24 @@
      */
     self.cityImage = [UIImage imageNamed:@"City1"];
     self.cityImageView = [[UIImageView alloc] initWithImage:self.cityImage];
+    
     self.cityImageView.frame = CGRectMake(0, 0, self.scrollViewCityGrid.bounds.size.width, self.scrollViewCityGrid.bounds.size.width);
         // 320 = width of scrollView
         // 320 = height of image (square)
     self.container = [[UIView alloc] initWithFrame:self.cityImageView.frame];
-    // 320 scrollview width
+    
+    self.cityArrowGrid = [UIImage imageNamed:@"ArrowGrid1"];
+    self.cityArrowGridView = [[UIImageView alloc] initWithImage:self.cityArrowGrid];
+    self.cityArrowGridView.frame = CGRectMake(0, 0, self.scrollViewCityGrid.bounds.size.width, self.scrollViewCityGrid.bounds.size.width);
+    self.container = [[UIView alloc] initWithFrame:self.cityArrowGridView.frame];
+    
     [self.scrollViewCityGrid addSubview:self.container];
     [self.container addSubview:self.cityImageView];
+    [self.container addSubview:self.cityArrowGridView];
+    
+    // Hides top layer, arrowGrid, displays cityImage
+    self.cityArrowGridView.hidden = YES;
+    
     self.scrollViewCityGrid.contentSize = self.container.bounds.size;
 
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
@@ -96,6 +107,7 @@
     
     // Adds cityImageView back
     [self.container addSubview:self.cityImageView];
+    [self.container addSubview:self.cityArrowGridView];
 }
 
 - (IBAction)biofilterButton:(UIButton *)sender {
@@ -117,6 +129,22 @@
 
     sender.selected = !sender.selected;
 
+}
+
+- (IBAction)arrowButton:(UIButton *)sender {
+
+    if (sender.selected == NO) {
+        
+        // Displays arrowGrid on top of cityGrid
+        self.cityArrowGridView.hidden = NO;
+        
+    } else if(sender.selected == YES) {
+        
+        // Hides arrowGrid, displays cityGrid
+        self.cityArrowGridView.hidden = YES;
+    }
+    
+    sender.selected = !sender.selected;
 }
 
 
@@ -177,7 +205,7 @@
         // Loops through all subviews for existing biofilters
         for (UIView *view in self.container.subviews) {
             
-            if(view != self.cityImageView) {    // Ignores cityView
+            if(view != self.cityImageView && view != self.cityArrowGridView) {    // Ignores cityView
 
                 NSLog([self point:mypoint isonRect:view.bounds] ? @"YES":@"NO");
                 
