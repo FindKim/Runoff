@@ -22,6 +22,7 @@
 - (IBAction)resetButton:(UIButton *)sender;
 - (IBAction)biofilterButton:(UIButton *)sender;
 - (IBAction)arrowButton:(UIButton *)sender;
+- (IBAction)rainButton:(UIButton *)sender;
 
 @end
 
@@ -37,6 +38,7 @@
     return _cityImage;
 }
 
+// Set up: cityView, arrowGridView, containerView, pinch zoom
 - (void)scrollViewSetUp {
     /*
      set image to image view
@@ -147,6 +149,10 @@
     sender.selected = !sender.selected;
 }
 
+- (IBAction)rainButton:(UIButton *)sender {
+    
+}
+
 
 - (void)placeBiofilterAtPoint:(CGPoint)mypoint{
     
@@ -167,12 +173,13 @@
 
 }
 
+
 - (void)setBiofilterCount:(int)biofilterCount {
     _biofilterCount = biofilterCount;
-    self.countLabel.text = [NSString stringWithFormat:@"count: %d", self.biofilterCount];
+    self.countLabel.text = [NSString stringWithFormat:@"%d", self.biofilterCount];
 }
 
-
+/*
 - (BOOL) point:(CGPoint) pt isonRect:(CGRect)rpt {
     if (pt.x >= rpt.origin.x && pt.x <= rpt.size.width + rpt.origin.x) {
         // within x bounds
@@ -183,8 +190,7 @@
     }
     return NO;
 }
-
-// Needs to delete biofilter within range of nearest biofilter
+*/
 
 - (IBAction)mapDoubleTap:(UITapGestureRecognizer *)sender {
 
@@ -207,24 +213,26 @@
             
             if(view != self.cityImageView && view != self.cityArrowGridView) {    // Ignores cityView
 
-                NSLog([self point:mypoint isonRect:view.bounds] ? @"YES":@"NO");
-                
-                if([self point:mypoint isonRect:view.bounds]){
+                // Deletes biofilter if tap is on exisiting biofilter
+                if (CGRectContainsPoint(view.frame, mypoint)) {
                     
-                    NSLog(@"removing?");
+                    // Removes biofilter at mypoint
+                    // Decrements biofilter count
+                    // Prevents from adding if deleted
                     [view removeFromSuperview];
                     self.biofilterCount--;
                     deleted = 1;
-                    
                 }
             }
         }
         
+        // If deletion doesn't occur
         if(deleted == 0){
             
+            // Add biofilter at mypoint
+            // Increment biofilter count
             [self placeBiofilterAtPoint:mypoint];
             self.biofilterCount++;
-            
         }
 
         NSLog(@"count = %d", self.biofilterCount);
@@ -237,7 +245,5 @@
     //column = (8/1200)(Iy + S*y)
     //row = (8/1200)(Ix + S*x)
 }
-    //                CGPoint pt = [mypoint locationInView:self.container];
-    //                view.frame;
 
 @end
