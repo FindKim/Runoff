@@ -18,11 +18,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;
 @property (nonatomic) int biofilterCount;
 @property (nonatomic) int swapBiofilter; // 0 = leaf; 1 = sprout;
+@property (nonatomic, strong) UIImageView *rainEffectView;
 
 - (IBAction)resetButton:(UIButton *)sender;
 - (IBAction)biofilterButton:(UIButton *)sender;
-- (IBAction)arrowButton:(UIButton *)sender;
 - (IBAction)rainButton:(UIButton *)sender;
+- (IBAction)arrowButton:(UIButton *)sender;
 
 @end
 
@@ -30,13 +31,22 @@
 
 //property builds an instance variable, a setter, a getter
 
--(UIImage *)cityImage
+- (UIImage *)cityImage
 {
     if (!_cityImage) {
         _cityImage = [[UIImage alloc] init];
     }
     return _cityImage;
 }
+
+- (UIImageView *)rainEffectView {
+    
+    if (!_rainEffectView) {
+        _rainEffectView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"Rain Effect"]];
+    }
+    return _rainEffectView;
+}
+
 
 // Set up: cityView, arrowGridView, containerView, pinch zoom
 - (void)scrollViewSetUp {
@@ -72,11 +82,15 @@
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
     self.scrollViewCityGrid.maximumZoomScale = 4.0; // twice its normal size
     self.scrollViewCityGrid.delegate = self;
+    
+    NSLog(@"place 10?");
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [self scrollViewSetUp];
+    if (!self.cityImageView) {
+        [self scrollViewSetUp];
+    }
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)sender {
@@ -133,26 +147,43 @@
 
 }
 
-- (IBAction)arrowButton:(UIButton *)sender {
-
-    if (sender.selected == NO) {
-        
-        // Displays arrowGrid on top of cityGrid
-        self.cityArrowGridView.hidden = NO;
-        
-    } else if(sender.selected == YES) {
-        
-        // Hides arrowGrid, displays cityGrid
-        self.cityArrowGridView.hidden = YES;
-    }
-    
-    sender.selected = !sender.selected;
-}
-
 - (IBAction)rainButton:(UIButton *)sender {
     
+    // Set center of rainEffectView to origin of map
+    // Animate from origin of map to bottom of map
+    
+    self.rainEffectView.frame = CGRectMake(self.cityImageView.frame.origin.x, self.cityImageView.frame.origin.y, self.rainEffectView.image.size.width, self.rainEffectView.image.size.height);
+    
+    self.rainEffectView.hidden = NO;
+    
+    [self.container addSubview:self.rainEffectView];
+    self.rainEffectView.center = self.cityImageView.frame.origin;
+    // wants bottom right corner of rainEffect to origin
+    
+    [UIView transitionWithView:self.rainEffectView
+                      duration:2
+                       options:0
+                    animations:^{
+                           self.rainEffectView.frame = CGRectMake(self.cityImageView.frame.origin.x, self.cityImageView.frame.origin.y, self.rainEffectView.image.size.width, self.rainEffectView.image.size.height);
+                    }
+                    completion:^(BOOL finished){
+                        self.rainEffectView.hidden = YES;
+                    }];
+    
+    
 }
 
+- (IBAction)arrowButton:(UIButton *)sender {
+    
+    self.cityArrowGridView.hidden = NO;
+    
+}
+
+- (IBAction)arrowButtonRelease:(UIButton *)sender {
+    
+    self.cityArrowGridView.hidden = YES;
+    
+}
 
 - (void)placeBiofilterAtPoint:(CGPoint)mypoint{
     
@@ -169,6 +200,7 @@
     
     [self.container addSubview:biofilterView];
     biofilterView.frame = CGRectMake(mypoint.x, mypoint.y, 20, 20);
+    // #define constants at some point
     biofilterView.center = mypoint;
 
 }
@@ -203,31 +235,28 @@
     float row = (8.0/320.0)*(mypoint.x);
     
     NSLog(@"col = %f, row = %f", col, row);
+        
+    int deleted = 0;    // If deleted = 1, don't add
     
-    if(self.biofilterCount<20){
+    // Loops through all subviews for existing biofilters
+    for (UIView *view in self.container.subviews) {
         
-        int deleted = 0;    // If deleted = 1, don't add
-        
-        // Loops through all subviews for existing biofilters
-        for (UIView *view in self.container.subviews) {
-            
-            if(view != self.cityImageView && view != self.cityArrowGridView) {    // Ignores cityView
+        if(view != self.cityImageView && view != self.cityArrowGridView) {    // Ignores cityView
 
-                // Deletes biofilter if tap is on exisiting biofilter
-                if (CGRectContainsPoint(view.frame, mypoint)) {
-                    
-                    // Removes biofilter at mypoint
-                    // Decrements biofilter count
-                    // Prevents from adding if deleted
-                    [view removeFromSuperview];
-                    self.biofilterCount--;
-                    deleted = 1;
+            // Deletes biofilter if tap is on exisiting biofilter
+            if (CGRectContainsPoint(view.frame, mypoint)) {
+                
+                // Removes biofilter at mypoint
+                // Decrements biofilter count
+                // Prevents from adding if deleted
+                [view removeFromSuperview];
+                self.biofilterCount--;
+                deleted = 1;
                 }
             }
         }
-        
         // If deletion doesn't occur
-        if(deleted == 0){
+        if(deleted == 0 && self.biofilterCount < 20){
             
             // Add biofilter at mypoint
             // Increment biofilter count
@@ -236,7 +265,6 @@
         }
 
         NSLog(@"count = %d", self.biofilterCount);
-    }
     //Scale factor S
     //Iy = inset y
     //Ix = inset x
