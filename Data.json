@@ -1,15 +1,4 @@
-// Data for Biofiliter Locations
-// x corresponds to the x-coordinate of the biofilter
-// y corresponds to the y-coordinate of the biofilter
-// grade corresponds to the correctness of the biofilter location on the grading scale 0 to 2.
-// i.e. if a student chooses the best spot for a biofilter, he will be given a 2
-// i.e. if a student chooses an okay spot (1 away from the best location), he will be given a 1
-// i.e. if a student chooses a poor spot, he will be given a 0.
-
-//THE FOLLOWING X and Y are in INCHES
 [
-
-//The Following Are Rows On The City Grid
 
  {"x":0.125,"y":0.625,"grade":0},
  {"x":0.375,"y":0.625,"grade":0},
@@ -161,7 +150,6 @@
  {"x":6.125,"y":7.875,"grade":0},
  {"x":6.375,"y":7.875,"grade":0},
 
-//The Following Are Columns On The City Grid EXCLUDING terms already used in Rows
 
  {"x":2.625,"y":5.125,"grade":0},
  {"x":2.625,"y":5.375,"grade":0},
@@ -226,10 +214,3 @@
  {"x":6.375,"y":7.625,"grade":0},
 
  ]
-
-//SUBLIME TEXT 2
-//[NSJSONSerializer]
-//NSArray
-//NSDictionary
-//NSString
-//NSNumber

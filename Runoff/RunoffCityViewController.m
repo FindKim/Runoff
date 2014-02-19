@@ -19,6 +19,7 @@
 @property (nonatomic) int biofilterCount;
 @property (nonatomic) int swapBiofilter; // 0 = leaf; 1 = sprout;
 @property (nonatomic, strong) UIImageView *rainEffectView;
+@property (nonatomic, strong) NSArray *locations;
 
 - (IBAction)resetButton:(UIButton *)sender;
 - (IBAction)biofilterButton:(UIButton *)sender;
@@ -46,7 +47,6 @@
     }
     return _rainEffectView;
 }
-
 
 // Set up: cityView, arrowGridView, containerView, pinch zoom
 - (void)scrollViewSetUp {
@@ -100,12 +100,49 @@
 - (void)scrollViewDidEndZooming:(UIScrollView *)sender withView:(UIView *)zoomView atScale:(CGFloat)scale {
 }
 
+
+- (NSArray *)locations{
+//Json Data
+    if (!_locations) {
+        NSData* locData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Data" ofType:@"json"]];
+        
+        NSError * error;
+        _locations = [NSJSONSerialization JSONObjectWithData:locData options:0 error:&error];
+        if(error)NSLog(@"JSON error: %@", error);
+    }
+    return _locations;
+}
+
 - (void)setBiofilterImage1:(UIImage *)biofilterImage1 {
     self.biofilterImage1 = [UIImage imageNamed:@"Biofilter"];
 }
 
 - (void)setBiofilterImage2:(UIImage *)biofilterImage2 {
     self.biofilterImage2 = [UIImage imageNamed:@"Biofilter2"];
+}
+
+- (float) distanceBetweenPoints:(CGPoint) touched and:(CGPoint) data{
+    return sqrtf(powf((touched.x-data.x),2) + powf((touched.y-data.y),2));
+}
+
+- (CGPoint) getBiofilterLocation:(CGPoint) touched{
+    //loop through the NSArray locations to find x and y values that are closest to the touched point
+    //make a point that is from the dictionary
+    //find the distance between the points
+    //see if it is the smallest distance
+    //if it is then store the point
+    CGPoint spt;
+    float min = INFINITY;
+    float distance;
+    for(NSDictionary * myDict in self.locations){
+        CGPoint data = CGPointMake([myDict[@"x"] floatValue], [myDict[@"y"] floatValue]);
+        distance = [self distanceBetweenPoints:touched and: data];
+        if(distance < min){
+            min = distance;
+            spt = data;
+        }
+    }
+    return spt;
 }
 
 
@@ -187,6 +224,7 @@
 
 - (void)placeBiofilterAtPoint:(CGPoint)mypoint{
     
+    
     UIImage * biofilterImage1 = [UIImage imageNamed:@"Biofilter"];
     UIImage * biofilterImage2 = [UIImage imageNamed:@"Biofilter2"];
     
@@ -226,15 +264,19 @@
 
 - (IBAction)mapDoubleTap:(UITapGestureRecognizer *)sender {
 
-    CGPoint mypoint = [sender locationInView:self.container];
+    CGPoint touched = [sender locationInView:self.container];
+    CGPoint newtouched;
+    newtouched.y = (8.0/320.0)*(touched.y);
+    newtouched.x = (8.0/320.0)*(touched.x);
     //determines point at which the user double taps the screen
-
+    CGPoint mypoint = [self getBiofilterLocation:newtouched];
+    
+    mypoint.y = (320.0/8.0)*(mypoint.y);
+    mypoint.x = (320.0/8.0)*(mypoint.x);
+    
     NSLog(@"x = %f,y = %f", mypoint.x, mypoint.y);
     
-    float col = (8.0/320.0)*(mypoint.y);
-    float row = (8.0/320.0)*(mypoint.x);
-    
-    NSLog(@"col = %f, row = %f", col, row);
+    NSLog(@"col = %f, row = %f", mypoint.y, mypoint.x);
         
     int deleted = 0;    // If deleted = 1, don't add
     
@@ -244,9 +286,9 @@
         if(view != self.cityImageView && view != self.cityArrowGridView) {    // Ignores cityView
 
             // Deletes biofilter if tap is on exisiting biofilter
-            if (CGRectContainsPoint(view.frame, mypoint)) {
+            if (CGRectContainsPoint(view.frame, touched)) {
                 
-                // Removes biofilter at mypoint
+                // Removes biofilter at touched point
                 // Decrements biofilter count
                 // Prevents from adding if deleted
                 [view removeFromSuperview];
@@ -265,13 +307,8 @@
         }
 
         NSLog(@"count = %d", self.biofilterCount);
-    //Scale factor S
-    //Iy = inset y
-    //Ix = inset x
-    //1200 points down and across
-    //8 units down and across
-    //column = (8/1200)(Iy + S*y)
-    //row = (8/1200)(Ix + S*x)
 }
+
+
 
 @end
