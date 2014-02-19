@@ -7,6 +7,7 @@
 //
 
 #import "RunoffCityViewController.h"
+#import "Constants.h"
 
 @interface RunoffCityViewController () <UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollViewCityGrid;
@@ -14,9 +15,13 @@
 @property (nonatomic, strong) UIImageView *cityImageView;
 @property (nonatomic, strong) UIImage *cityArrowGrid;
 @property (nonatomic, strong) UIImageView *cityArrowGridView;
+@property (nonatomic, strong) UIImage *biofilterImageLeaf;
+@property (nonatomic, strong) UIImage *biofilterImageSprout;
 @property (nonatomic, strong) UIView *container;
-@property (weak, nonatomic) IBOutlet UILabel *countLabel;
-@property (nonatomic) int biofilterCount;
+//@property (weak, nonatomic) IBOutlet UILabel *countLabel;
+//@property (nonatomic) int biofilterCount;
+@property (weak, nonatomic) IBOutlet UILabel *budgetLabel;
+@property (nonatomic) int budgetCount;
 @property (nonatomic) int swapBiofilter; // 0 = leaf; 1 = sprout;
 @property (nonatomic, strong) UIImageView *rainEffectView;
 @property (nonatomic, strong) NSArray *locations;
@@ -90,6 +95,7 @@
     [super viewDidLayoutSubviews];
     if (!self.cityImageView) {
         [self scrollViewSetUp];
+        _budgetCount = RO_INITBUDGET;
     }
 }
 
@@ -148,10 +154,13 @@
 
 - (IBAction)resetButton:(UIButton *)sender {
     
-    // Resets biofilter count to 0
+/*    // Resets biofilter count to 0
     while (self.biofilterCount > 0) {
         self.biofilterCount--;  // resets count to 0
     }
+*/
+    // Resets budget = $1000
+    self.budgetCount = RO_INITBUDGET;
     
     // Removes all subviews
     for (UIView *subview in self.container.subviews) {
@@ -163,19 +172,19 @@
     [self.container addSubview:self.cityArrowGridView];
 }
 
+
 - (IBAction)biofilterButton:(UIButton *)sender {
-        
-    UIImage * biofilterImage1 = [UIImage imageNamed:@"Biofilter"];
-    UIImage * biofilterImage2 = [UIImage imageNamed:@"Biofilter2"];
-    
     
     // Switches button image on touch; default: leaf, selected: sprout
     if(sender.selected == NO) {
-        [sender setImage:biofilterImage2
+        
+        [sender setImage:self.biofilterImageSprout
                 forState:UIControlStateSelected];
         self.swapBiofilter++;
+    
     } else if(sender.selected == YES) {
-        [sender setImage:biofilterImage1
+        
+        [sender setImage:self.biofilterImageLeaf
                 forState:UIControlStateNormal];
         self.swapBiofilter--;
     }
@@ -212,12 +221,14 @@
 
 - (IBAction)arrowButton:(UIButton *)sender {
     
+    // Press down on button unhides the arrowGrid
     self.cityArrowGridView.hidden = NO;
     
 }
 
 - (IBAction)arrowButtonRelease:(UIButton *)sender {
     
+    // Releasing the arrow button hides the arrowGrid
     self.cityArrowGridView.hidden = YES;
     
 }
@@ -231,9 +242,11 @@
     UIImageView * biofilterView;
     
     if (self.swapBiofilter == 0) { // places leaf at mypoint
-        biofilterView = [[UIImageView alloc] initWithImage:biofilterImage1];
+        biofilterView = [[UIImageView alloc] initWithImage:self.biofilterImageLeaf];
+        self.budgetCount -= RO_BFCOST1;
     } else if (self.swapBiofilter == 1) { // places sprout at mypoint
-        biofilterView = [[UIImageView alloc] initWithImage:biofilterImage2];
+        biofilterView = [[UIImageView alloc] initWithImage:self.biofilterImageSprout];
+        self.budgetCount -= RO_BFCOST2;
     }
     
     [self.container addSubview:biofilterView];
@@ -243,10 +256,18 @@
 
 }
 
-
+/*
 - (void)setBiofilterCount:(int)biofilterCount {
     _biofilterCount = biofilterCount;
-    self.countLabel.text = [NSString stringWithFormat:@"%d", self.biofilterCount];
+//    self.countLabel.text = [NSString stringWithFormat:@"%d", self.biofilterCount];
+}
+*/
+- (void)setBudgetCount:(int)budgetCount {
+    
+    _budgetCount = budgetCount;
+    self.budgetLabel.text = [NSString stringWithFormat:@"$%d", self.budgetCount];
+    
+    
 }
 
 /*
@@ -281,8 +302,8 @@
     int deleted = 0;    // If deleted = 1, don't add
     
     // Loops through all subviews for existing biofilters
-    for (UIView *view in self.container.subviews) {
-        
+    for (UIImageView *view in self.container.subviews) {
+            
         if(view != self.cityImageView && view != self.cityArrowGridView) {    // Ignores cityView
 
             // Deletes biofilter if tap is on exisiting biofilter
@@ -291,19 +312,30 @@
                 // Removes biofilter at touched point
                 // Decrements biofilter count
                 // Prevents from adding if deleted
-                [view removeFromSuperview];
-                self.biofilterCount--;
-                deleted = 1;
+                if ([view isKindOfClass:[UIImageView class]]) {
+                    if (view.image == self.biofilterImageLeaf) {
+                        self.budgetCount += 75;
+                    } else if (view.image == self.biofilterImageSprout) {
+                        self.budgetCount += 125;
+                    }
                 }
+                [view removeFromSuperview];
+//                self.biofilterCount--;
+                deleted = 1;
             }
         }
+    }
         // If deletion doesn't occur
-        if(deleted == 0 && self.biofilterCount < 20){
+        if(deleted == 0){
+            if ((self.swapBiofilter == 0 && self.budgetCount >= RO_BFCOST1) ||
+                (self.swapBiofilter == 1 && self.budgetCount >= RO_BFCOST2)) {
+                [self placeBiofilterAtPoint:mypoint];
+ //               self.biofilterCount++;
             
+            // Checks if enough in budget
             // Add biofilter at mypoint
             // Increment biofilter count
-            [self placeBiofilterAtPoint:mypoint];
-            self.biofilterCount++;
+            }
         }
 
         NSLog(@"count = %d", self.biofilterCount);

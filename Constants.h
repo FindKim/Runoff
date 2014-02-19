@@ -12,5 +12,9 @@
 #define RO_START (@"Start")
 #define RO_CITY (@"City")
 
+#define RO_INITBUDGET (1000)
+#define RO_BFCOST1 (75)
+#define RO_BFCOST2 (125)
+
 
 #endif
