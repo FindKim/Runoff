@@ -191,8 +191,9 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="IsS-c9-L28"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" image="Biofilter">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -219,6 +220,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="70" id="4mo-0M-vvh"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="Rbs-Es-YwV"/>
                                     <constraint firstAttribute="height" constant="70" id="Tbh-FD-6TQ"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="70" id="zE9-BT-c8L"/>
                                 </constraints>
@@ -237,26 +239,27 @@
                                     <outletCollection property="gestureRecognizers" destination="XNc-Kj-tdf" appends="YES" id="ryM-dH-uJm"/>
                                 </connections>
                             </scrollView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f26-X5-gR2">
-                                <rect key="frame" x="147" y="534" width="13" height="26"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$1000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9CX-Mz-xPu">
+                                <rect key="frame" x="230" y="458" width="90" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
+                                <color key="backgroundColor" red="0.85098046059999999" green="0.93725496529999996" blue="0.90196084980000002" alpha="1" colorSpace="deviceRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="0.85098046064376831" green="0.93725496530532837" blue="0.90196084976196289" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="9CX-Mz-xPu" secondAttribute="trailing" id="06K-in-Fri"/>
                             <constraint firstItem="GNz-37-Aat" firstAttribute="bottom" secondItem="jCs-yC-rij" secondAttribute="bottom" id="28z-a0-94d"/>
                             <constraint firstItem="yFF-8L-Vjn" firstAttribute="bottom" secondItem="mKX-cq-vaR" secondAttribute="bottom" id="562-Qf-fF4"/>
                             <constraint firstItem="yFF-8L-Vjn" firstAttribute="leading" secondItem="mKX-cq-vaR" secondAttribute="trailing" id="59D-dd-el1"/>
+                            <constraint firstItem="yFF-8L-Vjn" firstAttribute="top" secondItem="9CX-Mz-xPu" secondAttribute="bottom" constant="8" symbolic="YES" id="AQt-IL-pNq"/>
                             <constraint firstAttribute="trailing" secondItem="yFF-8L-Vjn" secondAttribute="trailing" constant="20" id="IDS-Hv-waQ"/>
                             <constraint firstItem="GNz-37-Aat" firstAttribute="leading" secondItem="tSN-Ne-3fV" secondAttribute="leading" constant="20" symbolic="YES" id="Jwe-4I-h9e"/>
                             <constraint firstItem="d2M-He-ngh" firstAttribute="top" secondItem="yFF-8L-Vjn" secondAttribute="bottom" constant="20" symbolic="YES" id="Kul-qo-kRI"/>
-                            <constraint firstItem="mKX-cq-vaR" firstAttribute="leading" secondItem="f26-X5-gR2" secondAttribute="trailing" id="L2D-S1-BhJ"/>
                             <constraint firstItem="mKX-cq-vaR" firstAttribute="leading" secondItem="jCs-yC-rij" secondAttribute="trailing" id="MjC-fq-kbb"/>
                             <constraint firstItem="d2M-He-ngh" firstAttribute="top" secondItem="GNz-37-Aat" secondAttribute="bottom" constant="20" symbolic="YES" id="TKg-We-Q5C"/>
                             <constraint firstItem="yFF-8L-Vjn" firstAttribute="top" secondItem="4pA-Gb-O3S" secondAttribute="bottom" constant="8" symbolic="YES" id="VJA-yW-MIM"/>
-                            <constraint firstItem="f26-X5-gR2" firstAttribute="bottom" secondItem="jCs-yC-rij" secondAttribute="bottom" id="XDK-2F-ZHd"/>
                             <constraint firstItem="4pA-Gb-O3S" firstAttribute="top" secondItem="znX-Br-PBZ" secondAttribute="bottom" id="XQS-3m-Bld"/>
                             <constraint firstItem="yFF-8L-Vjn" firstAttribute="leading" secondItem="mKX-cq-vaR" secondAttribute="trailing" id="XTW-LR-ttg"/>
                             <constraint firstAttribute="trailing" secondItem="4pA-Gb-O3S" secondAttribute="trailing" id="e3m-iT-z8k"/>
@@ -266,12 +269,14 @@
                             <constraint firstItem="jCs-yC-rij" firstAttribute="leading" secondItem="GNz-37-Aat" secondAttribute="trailing" id="mKr-et-45O"/>
                             <constraint firstItem="mKX-cq-vaR" firstAttribute="bottom" secondItem="GNz-37-Aat" secondAttribute="bottom" id="pyl-6f-p12"/>
                             <constraint firstItem="yFF-8L-Vjn" firstAttribute="width" secondItem="GNz-37-Aat" secondAttribute="width" id="t0D-Yr-hZq"/>
+                            <constraint firstItem="9CX-Mz-xPu" firstAttribute="leading" secondItem="yFF-8L-Vjn" secondAttribute="leading" id="tPu-Ie-8aK"/>
                             <constraint firstItem="jCs-yC-rij" firstAttribute="width" secondItem="mKX-cq-vaR" secondAttribute="width" id="wVZ-B0-Scz"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ZqU-Wi-CEa"/>
                     <connections>
-                        <outlet property="countLabel" destination="f26-X5-gR2" id="NbH-CO-mSI"/>
+                        <outlet property="biofilterButtonLabel" destination="jCs-yC-rij" id="mcU-i9-Bbi"/>
+                        <outlet property="budgetLabel" destination="9CX-Mz-xPu" id="deG-a3-By9"/>
                         <outlet property="scrollViewCityGrid" destination="4pA-Gb-O3S" id="YET-Gx-o1A"/>
                     </connections>
                 </viewController>
