@@ -22,6 +22,7 @@
 @property (nonatomic) int budgetCount;
 @property (nonatomic) int swapBiofilter; // 0 = leaf; 1 = sprout;
 @property (nonatomic, strong) UIImageView *rainEffectView;
+@property (weak, nonatomic) IBOutlet UIButton *biofilterButtonLabel;
 @property (nonatomic, strong) NSArray *locations;
 
 - (IBAction)resetButton:(UIButton *)sender;
@@ -50,6 +51,23 @@
     }
     return _rainEffectView;
 }
+
+- (UIImage *)biofilterImageLeaf {
+    
+    if (!_biofilterImageLeaf) {
+        _biofilterImageLeaf = [UIImage imageNamed:@"Biofilter"];
+    }
+    return _biofilterImageLeaf;
+}
+
+- (UIImage *)biofilterImageSprout {
+    
+    if (!_biofilterImageSprout) {
+        _biofilterImageSprout = [UIImage imageNamed:@"Biofilter2"];
+    }
+    return _biofilterImageSprout;
+}
+
 
 // Set up: cityView, arrowGridView, containerView, pinch zoom
 - (void)scrollViewSetUp {
@@ -280,7 +298,8 @@
 
             // Deletes biofilter if tap is on exisiting biofilter
             if (CGRectContainsPoint(view.frame, touched)) {
-                
+
+                // Checks which type deleted to refund cost
                 // Removes biofilter at touched point
                 // Refunds biofilter cost
                 // Prevents from adding if deleted
