@@ -52,22 +52,6 @@
     return _rainEffectView;
 }
 
-- (UIImage *)biofilterImageLeaf {
-    
-    if (!_biofilterImageLeaf) {
-        _biofilterImageLeaf = [UIImage imageNamed:@"Biofilter"];
-    }
-    return _biofilterImageLeaf;
-}
-
-- (UIImage *)biofilterImageSprout {
-    
-    if (!_biofilterImageSprout) {
-        _biofilterImageSprout = [UIImage imageNamed:@"Biofilter2"];
-    }
-    return _biofilterImageSprout;
-}
-
 
 // Set up: cityView, arrowGridView, containerView, pinch zoom
 - (void)scrollViewSetUp {
