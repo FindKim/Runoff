@@ -18,8 +18,6 @@
 @property (nonatomic, strong) UIImage *biofilterImageLeaf;
 @property (nonatomic, strong) UIImage *biofilterImageSprout;
 @property (nonatomic, strong) UIView *container;
-//@property (weak, nonatomic) IBOutlet UILabel *countLabel;
-//@property (nonatomic) int biofilterCount;
 @property (weak, nonatomic) IBOutlet UILabel *budgetLabel;
 @property (nonatomic) int budgetCount;
 @property (nonatomic) int swapBiofilter; // 0 = leaf; 1 = sprout;
@@ -119,12 +117,12 @@
     return _locations;
 }
 
-- (void)setBiofilterImage1:(UIImage *)biofilterImage1 {
-    self.biofilterImage1 = [UIImage imageNamed:@"Biofilter"];
+- (void)setBiofilterImageLeaf:(UIImage *)biofilterImageLeaf {
+    self.biofilterImageLeaf = [UIImage imageNamed:@"Biofilter"];
 }
 
-- (void)setBiofilterImage2:(UIImage *)biofilterImage2 {
-    self.biofilterImage2 = [UIImage imageNamed:@"Biofilter2"];
+- (void)setBiofilterImageSprout:(UIImage *)biofilterImageSprout {
+    self.biofilterImageSprout = [UIImage imageNamed:@"Biofilter2"];
 }
 
 - (float) distanceBetweenPoints:(CGPoint) touched and:(CGPoint) data{
@@ -154,11 +152,6 @@
 
 - (IBAction)resetButton:(UIButton *)sender {
     
-/*    // Resets biofilter count to 0
-    while (self.biofilterCount > 0) {
-        self.biofilterCount--;  // resets count to 0
-    }
-*/
     // Resets budget = $1000
     self.budgetCount = RO_INITBUDGET;
     
@@ -235,10 +228,6 @@
 
 - (void)placeBiofilterAtPoint:(CGPoint)mypoint{
     
-    
-    UIImage * biofilterImage1 = [UIImage imageNamed:@"Biofilter"];
-    UIImage * biofilterImage2 = [UIImage imageNamed:@"Biofilter2"];
-    
     UIImageView * biofilterView;
     
     if (self.swapBiofilter == 0) { // places leaf at mypoint
@@ -256,12 +245,7 @@
 
 }
 
-/*
-- (void)setBiofilterCount:(int)biofilterCount {
-    _biofilterCount = biofilterCount;
-//    self.countLabel.text = [NSString stringWithFormat:@"%d", self.biofilterCount];
-}
-*/
+
 - (void)setBudgetCount:(int)budgetCount {
     
     _budgetCount = budgetCount;
@@ -270,18 +254,6 @@
     
 }
 
-/*
-- (BOOL) point:(CGPoint) pt isonRect:(CGRect)rpt {
-    if (pt.x >= rpt.origin.x && pt.x <= rpt.size.width + rpt.origin.x) {
-        // within x bounds
-        if (pt.y > rpt.origin.y && pt.y < rpt.size.height + rpt.origin.y) {
-            // within y bounds
-            return YES;
-        }
-    }
-    return NO;
-}
-*/
 
 - (IBAction)mapDoubleTap:(UITapGestureRecognizer *)sender {
 
@@ -310,7 +282,7 @@
             if (CGRectContainsPoint(view.frame, touched)) {
                 
                 // Removes biofilter at touched point
-                // Decrements biofilter count
+                // Refunds biofilter cost
                 // Prevents from adding if deleted
                 if ([view isKindOfClass:[UIImageView class]]) {
                     if (view.image == self.biofilterImageLeaf) {
@@ -320,7 +292,6 @@
                     }
                 }
                 [view removeFromSuperview];
-//                self.biofilterCount--;
                 deleted = 1;
             }
         }
@@ -330,15 +301,12 @@
             if ((self.swapBiofilter == 0 && self.budgetCount >= RO_BFCOST1) ||
                 (self.swapBiofilter == 1 && self.budgetCount >= RO_BFCOST2)) {
                 [self placeBiofilterAtPoint:mypoint];
- //               self.biofilterCount++;
             
             // Checks if enough in budget
             // Add biofilter at mypoint
-            // Increment biofilter count
+            // Reduces biofilter budget
             }
         }
-
-        NSLog(@"count = %d", self.biofilterCount);
 }
 
 
