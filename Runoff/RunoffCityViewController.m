@@ -25,7 +25,7 @@
 @property (nonatomic) int swapBiofilter; // 0 = leaf; 1 = sprout;
 @property (nonatomic, strong) UIImageView *rainEffectView;
 @property (weak, nonatomic) IBOutlet UIButton *biofilterButtonLabel;
-@property (nonatomic, strong) NSArray *locations;
+@property (nonatomic, strong) NSMutableArray *locations;
 
 - (IBAction)resetButton:(UIButton *)sender;
 - (IBAction)biofilterButton:(UIButton *)sender;
@@ -125,13 +125,23 @@
 }
 
 
-- (NSArray *)locations{
+- (NSMutableArray *)locations{
 //Json Data
     if (!_locations) {
         NSData* locData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Data" ofType:@"json"]];
         
         NSError * error;
-        _locations = [NSJSONSerialization JSONObjectWithData:locData options:0 error:&error];
+        NSArray * tempLoc;
+        tempLoc = [NSJSONSerialization JSONObjectWithData:locData options:0 error:&error];
+        int i = 0;
+        NSMutableArray * mutLocation = [tempLoc mutableCopy];
+        for(NSDictionary *dict in tempLoc){
+            NSMutableDictionary * mutDict = [dict mutableCopy];
+            [mutDict setObject:@NO forKey:RO_K_LEAF_IS_HERE];
+            mutLocation[i] = mutDict;
+            i++;
+        }
+        _locations = [mutLocation copy];
         if(error)NSLog(@"JSON error: %@", error);
     }
     return _locations;
@@ -167,6 +177,45 @@
         }
     }
     return spt;
+}
+
+- (BOOL) isBiofilterHere:(CGPoint) touched{
+    //loop through the NSArray locations to find x and y values that are closest to the touched point
+    //make a point that is from the dictionary
+    //find the distance between the points
+    //see if it is the smallest distance
+    //if it is then store the point
+    BOOL pointIsHere;
+    float min = INFINITY;
+    float distance;
+    for(NSDictionary * myDict in self.locations){
+        CGPoint data = CGPointMake([myDict[@"x"] floatValue], [myDict[@"y"] floatValue]);
+        distance = [self distanceBetweenPoints:touched and: data];
+        if(distance < min){
+            min = distance;
+            pointIsHere = [myDict[RO_K_LEAF_IS_HERE] boolValue];
+        }
+    }
+    return pointIsHere;
+}
+- (void) setBiofilterHere:(CGPoint) touched to:(BOOL)hereOrNot{
+    //loop through the NSArray locations to find x and y values that are closest to the touched point
+    //make a point that is from the dictionary
+    //find the distance between the points
+    //see if it is the smallest distance
+    //if it is then store the point
+    float min = INFINITY;
+    float distance;
+    NSMutableDictionary * shortestPoint;
+    for(NSMutableDictionary * myDict in self.locations){
+        CGPoint data = CGPointMake([myDict[@"x"] floatValue], [myDict[@"y"] floatValue]);
+        distance = [self distanceBetweenPoints:touched and: data];
+        if(distance < min){
+            min = distance;
+            shortestPoint = myDict;
+        }
+    }
+    shortestPoint[RO_K_LEAF_IS_HERE] = [NSNumber numberWithBool:hereOrNot];
 }
 
 
@@ -305,6 +354,8 @@
     //determines point at which the user double taps the screen
     CGPoint mypoint = [self getBiofilterLocation:newtouched];
     
+    BOOL biofilterIsHere = [self isBiofilterHere:newtouched];
+    
     mypoint.y = (320.0/8.0)*(mypoint.y);
     mypoint.x = (320.0/8.0)*(mypoint.x);
     
@@ -321,6 +372,8 @@
 
             // Deletes biofilter if tap is on exisiting biofilter
             if (CGRectContainsPoint(view.frame, touched)) {
+                //set "leaf is not here"
+                [self setBiofilterHere:newtouched to:NO];
 
                 // Checks which type deleted to refund cost
                 // Removes biofilter at touched point
@@ -339,8 +392,9 @@
             }
         }
     }
-        // If deletion doesn't occur
-        if(deleted == 0){
+        // If deletion doesn't occur AND there is no biofilter
+        if(deleted == 0 && !biofilterIsHere){
+            [self setBiofilterHere:newtouched to:YES];
             if ((self.swapBiofilter == 0 && self.budgetCount >= RO_BFCOST1) ||
                 (self.swapBiofilter == 1 && self.budgetCount >= RO_BFCOST2)) {
                 [self placeBiofilterAtPoint:mypoint];

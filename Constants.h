@@ -16,5 +16,7 @@
 #define RO_BFCOST1 (75)
 #define RO_BFCOST2 (125)
 
+#define RO_K_LEAF_IS_HERE (@"leaf is here")
+
 
 #endif
