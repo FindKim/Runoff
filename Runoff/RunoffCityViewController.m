@@ -254,8 +254,7 @@
 - (void)placeBiofilterAtPoint:(CGPoint)mypoint{
     
     
-    UIImage * biofilterImage1 = [UIImage imageNamed:@"Biofilter"];
-    UIImage * biofilterImage2 = [UIImage imageNamed:@"Biofilter2"];
+
     
     UIImageView * biofilterView;
     
@@ -274,12 +273,8 @@
 
 }
 
-/*
-- (void)setBiofilterCount:(int)biofilterCount {
-    _biofilterCount = biofilterCount;
-//    self.countLabel.text = [NSString stringWithFormat:@"%d", self.biofilterCount];
-}
-*/
+
+
 - (void)setBudgetCount:(int)budgetCount {
     
     _budgetCount = budgetCount;
