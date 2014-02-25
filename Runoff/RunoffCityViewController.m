@@ -8,8 +8,10 @@
 
 #import "RunoffCityViewController.h"
 #import "Constants.h"
+#import "RunoffSelectCityViewController.h"
 
 @interface RunoffCityViewController () <UIScrollViewDelegate>
+//@property (nonatomic, strong) NSNumber *visit;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollViewCityGrid;
 @property (nonatomic, strong) UIImage *cityImage; //_cityImage instance variable
 @property (nonatomic, strong) UIImageView *cityImageView;
@@ -35,6 +37,14 @@
 @implementation RunoffCityViewController
 
 //property builds an instance variable, a setter, a getter
+
+/*
+- (void)setVisit:(NSNumber *)visit {
+    _visit = visit;
+    NSString *result = [NSString stringWithFormat:@"%@",visit];
+    NSLog(@"Got visit %@", result);
+}
+*/
 
 - (UIImage *)cityImage
 {
@@ -134,15 +144,8 @@
     }
     return _locations;
 }
-/*
-- (void)setBiofilterImageLeaf:(UIImage *)biofilterImageLeaf {
-    self.biofilterImageLeaf = [UIImage imageNamed:@"Biofilter"];
-}
 
-- (void)setBiofilterImageSprout:(UIImage *)biofilterImageSprout {
-    self.biofilterImageSprout = [UIImage imageNamed:@"Biofilter2"];
-}
-*/
+
 - (float) distanceBetweenPoints:(CGPoint) touched and:(CGPoint) data{
     return sqrtf(powf((touched.x-data.x),2) + powf((touched.y-data.y),2));
 }

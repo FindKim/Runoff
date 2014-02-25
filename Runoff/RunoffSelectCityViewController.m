@@ -11,6 +11,8 @@
 
 @interface RunoffSelectCityViewController ()
 
+@property (nonatomic, retain) NSNumber *visit;
+
 @end
 
 @implementation RunoffSelectCityViewController
@@ -20,6 +22,15 @@
     [self performSegueWithIdentifier:RO_CITY sender:self];
 
 }
+/*
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
+    if ([[segue identifier] isEqualToString:@"City"]) {
+        if (segue.destinationViewController.visit == 0) {
+            [segue.destinationViewController setVisit:1];
+        }
+    }
+}
+*/
 
 @end
