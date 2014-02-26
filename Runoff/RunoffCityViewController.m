@@ -19,6 +19,8 @@
 @property (nonatomic, strong) UIImageView *cityArrowGridView;
 @property (nonatomic, strong) UIImage *biofilterImageLeaf;
 @property (nonatomic, strong) UIImage *biofilterImageSprout;
+@property (nonatomic, strong) UIImage *biofilterButtonImageLeaf;
+@property (nonatomic, strong) UIImage *biofilterButtonImageSprout;
 @property (nonatomic, strong) UIView *container;
 @property (weak, nonatomic) IBOutlet UILabel *budgetLabel;
 @property (nonatomic) int budgetCount;
@@ -78,6 +80,21 @@
     return _biofilterImageSprout;
 }
 
+- (UIImage *)biofilterButtonImageLeaf {
+    
+    if (!_biofilterButtonImageLeaf) {
+        _biofilterButtonImageLeaf = [UIImage imageNamed:@"ButtonImageLeaf"];
+    }
+    return _biofilterButtonImageLeaf;
+}
+
+- (UIImage *)biofilterButtonImageSprout {
+    
+    if (!_biofilterButtonImageSprout) {
+        _biofilterButtonImageSprout = [UIImage imageNamed:@"ButtonImageSprout"];
+    }
+    return _biofilterButtonImageSprout;
+}
 
 // Set up: cityView, arrowGridView, containerView, pinch zoom
 - (void)scrollViewSetUp {
@@ -133,8 +150,8 @@
 }
 
 
-- (NSArray *)locations{
-    //Json Data
+- (NSMutableArray *)locations{
+//Json Data
     if (!_locations) {
         NSData* locData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Data" ofType:@"json"]];
         
@@ -241,13 +258,13 @@
     // Switches button image on touch; default: leaf, selected: sprout
     if(sender.selected == NO) {
         
-        [sender setImage:self.biofilterImageSprout
+        [sender setImage:self.biofilterButtonImageSprout
                 forState:UIControlStateSelected];
         self.swapBiofilter++;
         
     } else if(sender.selected == YES) {
         
-        [sender setImage:self.biofilterImageLeaf
+        [sender setImage:self.biofilterButtonImageLeaf
                 forState:UIControlStateNormal];
         self.swapBiofilter--;
     }
@@ -298,6 +315,9 @@
 
 - (void)placeBiofilterAtPoint:(CGPoint)mypoint{
     
+    
+
+    
     UIImageView * biofilterView;
     
     if (self.swapBiofilter == 0) { // places leaf at mypoint
@@ -314,6 +334,7 @@
     biofilterView.center = mypoint;
     
 }
+
 
 
 - (void)setBudgetCount:(int)budgetCount {
@@ -352,7 +373,9 @@
             
             // Deletes biofilter if tap is on exisiting biofilter
             if (CGRectContainsPoint(view.frame, touched)) {
-                
+                //set "leaf is not here"
+                [self setBiofilterHere:newtouched to:NO];
+
                 // Checks which type deleted to refund cost
                 // Removes biofilter at touched point
                 // Refunds biofilter cost
@@ -369,11 +392,13 @@
             }
         }
     }
-    // If deletion doesn't occur
-    if(deleted == 0){
-        if ((self.swapBiofilter == 0 && self.budgetCount >= RO_BFCOST1) ||
-            (self.swapBiofilter == 1 && self.budgetCount >= RO_BFCOST2)) {
-            [self placeBiofilterAtPoint:mypoint];
+        // If deletion doesn't occur AND there is no biofilter
+        if(deleted == 0 && !biofilterIsHere){
+            [self setBiofilterHere:newtouched to:YES];
+            if ((self.swapBiofilter == 0 && self.budgetCount >= RO_BFCOST1) ||
+                (self.swapBiofilter == 1 && self.budgetCount >= RO_BFCOST2)) {
+                [self placeBiofilterAtPoint:mypoint];
+ //               self.biofilterCount++;
             
             // Checks if enough in budget
             // Add biofilter at mypoint
