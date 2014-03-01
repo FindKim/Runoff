@@ -12,6 +12,7 @@
 @interface RunoffSelectCityViewController ()
 
 @property (nonatomic, retain) NSNumber *visit;
+//@property (nonatomic) BOOL isFirstTimeOnScreen; //this checks to see if the user has been on the screen before
 
 @end
 
@@ -20,6 +21,11 @@
 - (IBAction)City1:(UIButton *)sender {
     
     [self performSegueWithIdentifier:RO_CITY sender:self];
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults setValue:NO forKey:@"isFirstTimeOnScreen"];
+//    [defaults synchronize];
+//    NSLog(@"Data saved");
+    
 
 }
 /*
