@@ -11,7 +11,6 @@
 #import "RunoffSelectCityViewController.h"
 
 @interface RunoffCityViewController () <UIScrollViewDelegate>
-//@property (nonatomic, strong) NSNumber *visit;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollViewCityGrid;
 @property (nonatomic, strong) UIImage *cityImage; //_cityImage instance variable
 @property (nonatomic, strong) UIImageView *cityImageView;
@@ -38,16 +37,6 @@
 
 @implementation RunoffCityViewController
 
-//property builds an instance variable, a setter, a getter
-
-/*
-- (void)setVisit:(NSNumber *)visit {
-    _visit = visit;
-    NSString *result = [NSString stringWithFormat:@"%@",visit];
-    NSLog(@"Got visit %@", result);
-}
-*/
-
 - (UIImage *)cityImage
 {
     if (!_cityImage) {
@@ -56,31 +45,32 @@
     return _cityImage;
 }
 
-- (UIImageView *)rainEffectView {
-    
+- (UIImageView *)rainEffectView
+{
     if (!_rainEffectView) {
         _rainEffectView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"Rain Effect"]];
     }
     return _rainEffectView;
 }
 
-- (UIImage *)biofilterImageLeaf {
-    
+- (UIImage *)biofilterImageLeaf
+{
     if (!_biofilterImageLeaf) {
         _biofilterImageLeaf = [UIImage imageNamed:@"Biofilter"];
     }
     return _biofilterImageLeaf;
 }
 
-- (UIImage *)biofilterImageSprout {
-    
+- (UIImage *)biofilterImageSprout
+{
     if (!_biofilterImageSprout) {
         _biofilterImageSprout = [UIImage imageNamed:@"Biofilter2"];
     }
     return _biofilterImageSprout;
 }
 
-- (UIImage *)biofilterButtonImageLeaf {
+- (UIImage *)biofilterButtonImageLeaf
+{
     
     if (!_biofilterButtonImageLeaf) {
         _biofilterButtonImageLeaf = [UIImage imageNamed:@"ButtonImageLeaf"];
@@ -88,16 +78,45 @@
     return _biofilterButtonImageLeaf;
 }
 
-- (UIImage *)biofilterButtonImageSprout {
-    
+- (UIImage *)biofilterButtonImageSprout
+{
     if (!_biofilterButtonImageSprout) {
         _biofilterButtonImageSprout = [UIImage imageNamed:@"ButtonImageSprout"];
     }
     return _biofilterButtonImageSprout;
 }
 
+
+- (BOOL)beenHere
+{
+    NSNumber *bRun = [[NSUserDefaults standardUserDefaults] valueForKey:@"beenHere"];
+    if (bRun) return YES;
+    return [bRun boolValue];
+}
+
+- (void)setBeenHere:(int)value
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:value forKey:@"beenHere"];
+}
+
+- (void)messages
+{
+    NSLog(@"This is after messages");
+
+        // code for pop up here
+}
+
+
+- (void)setBudgetCount:(int)budgetCount
+{
+    _budgetCount = budgetCount;
+    self.budgetLabel.text = [NSString stringWithFormat:@"$%d", self.budgetCount];
+}
+
+
 // Set up: cityView, arrowGridView, containerView, pinch zoom
-- (void)scrollViewSetUp {
+- (void)scrollViewSetUp
+{
     /*
      set image to image view
      set image view size to image
@@ -131,18 +150,29 @@
     self.scrollViewCityGrid.maximumZoomScale = 4.0; // twice its normal size
     self.scrollViewCityGrid.delegate = self;
     
-    NSLog(@"place 10?");
 }
 
-- (void)viewDidLayoutSubviews {
+
+- (void)viewDidLayoutSubviews
+{
     [super viewDidLayoutSubviews];
+    
     if (!self.cityImageView) {
         [self scrollViewSetUp];
-        _budgetCount = RO_INITBUDGET;
+        _budgetCount = RO_INITBUDGET;   // Initializes budget
+    }
+    
+    // First visit, display messages
+    NSLog(@"%d", [[NSUserDefaults standardUserDefaults] integerForKey:@"beenHere"]);
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"beenHere"] == 0) {
+        [self messages];
+        [self setBeenHere:1];
+        NSLog(@"the new value is %d", [[NSUserDefaults standardUserDefaults] integerForKey:@"beenHere"]);
     }
 }
 
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)sender {
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)sender
+{
     return self.container;
 }
 
@@ -150,8 +180,84 @@
 }
 
 
-- (NSMutableArray *)locations{
-//Json Data
+- (IBAction)resetButton:(UIButton *)sender
+{
+    // Resets budget = $1000
+    self.budgetCount = RO_INITBUDGET;
+    
+    // Removes all subviews
+    for (UIView *subview in self.container.subviews) {
+        [subview removeFromSuperview];
+    }
+    
+    // Adds cityImageView back
+    [self.container addSubview:self.cityImageView];
+    [self.container addSubview:self.cityArrowGridView];
+}
+
+
+- (IBAction)biofilterButton:(UIButton *)sender
+{
+    // Switches button image on touch; default: leaf, selected: sprout
+    if(sender.selected == NO) {
+        
+        [sender setImage:self.biofilterButtonImageSprout
+                forState:UIControlStateSelected];
+        self.swapBiofilter++;
+        
+    } else if(sender.selected == YES) {
+        
+        [sender setImage:self.biofilterButtonImageLeaf
+                forState:UIControlStateNormal];
+        self.swapBiofilter--;
+    }
+    
+    sender.selected = !sender.selected;
+    
+}
+
+
+- (IBAction)arrowButton:(UIButton *)sender
+{
+    // Press down on button unhides the arrowGrid
+    self.cityArrowGridView.hidden = NO;
+}
+
+- (IBAction)arrowButtonRelease:(UIButton *)sender
+{
+    // Releasing the arrow button hides the arrowGrid
+    self.cityArrowGridView.hidden = YES;
+}
+
+
+- (IBAction)rainButton:(UIButton *)sender
+{
+    // Set center of rainEffectView to origin of map
+    // Animate from origin of map to bottom of map
+    
+    self.rainEffectView.frame = CGRectMake(self.cityImageView.frame.origin.x, self.cityImageView.frame.origin.y, self.rainEffectView.image.size.width, self.rainEffectView.image.size.height);
+    
+    self.rainEffectView.hidden = NO;
+    
+    [self.container addSubview:self.rainEffectView];
+    self.rainEffectView.center = self.cityImageView.frame.origin;
+    // wants bottom right corner of rainEffect to origin
+    
+    [UIView transitionWithView:self.rainEffectView
+                      duration:2
+                       options:0
+                    animations:^{
+                        self.rainEffectView.frame = CGRectMake(self.cityImageView.frame.origin.x, self.cityImageView.frame.origin.y, self.rainEffectView.image.size.width, self.rainEffectView.image.size.height);
+                    }
+                    completion:^(BOOL finished){
+                        self.rainEffectView.hidden = YES;
+                    }];
+}
+
+
+- (NSMutableArray *)locations
+{
+    //Json Data
     if (!_locations) {
         NSData* locData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Data" ofType:@"json"]];
         
@@ -173,11 +279,13 @@
 }
 
 
-- (float) distanceBetweenPoints:(CGPoint) touched and:(CGPoint) data{
+- (float) distanceBetweenPoints:(CGPoint) touched and:(CGPoint) data
+{
     return sqrtf(powf((touched.x-data.x),2) + powf((touched.y-data.y),2));
 }
 
-- (CGPoint) getBiofilterLocation:(CGPoint) touched{
+- (CGPoint) getBiofilterLocation:(CGPoint) touched
+{
     //loop through the NSArray locations to find x and y values that are closest to the touched point
     //make a point that is from the dictionary
     //find the distance between the points
@@ -197,7 +305,9 @@
     return spt;
 }
 
-- (BOOL) isBiofilterHere:(CGPoint) touched{
+
+- (BOOL) isBiofilterHere:(CGPoint) touched
+{
     //loop through the NSArray locations to find x and y values that are closest to the touched point
     //make a point that is from the dictionary
     //find the distance between the points
@@ -216,7 +326,10 @@
     }
     return pointIsHere;
 }
-- (void) setBiofilterHere:(CGPoint) touched to:(BOOL)hereOrNot{
+
+
+- (void) setBiofilterHere:(CGPoint) touched to:(BOOL)hereOrNot
+{
     //loop through the NSArray locations to find x and y values that are closest to the touched point
     //make a point that is from the dictionary
     //find the distance between the points
@@ -237,87 +350,8 @@
 }
 
 
-- (IBAction)resetButton:(UIButton *)sender {
-    
-    // Resets budget = $1000
-    self.budgetCount = RO_INITBUDGET;
-    
-    // Removes all subviews
-    for (UIView *subview in self.container.subviews) {
-        [subview removeFromSuperview];
-    }
-    
-    // Adds cityImageView back
-    [self.container addSubview:self.cityImageView];
-    [self.container addSubview:self.cityArrowGridView];
-}
-
-
-- (IBAction)biofilterButton:(UIButton *)sender {
-    
-    // Switches button image on touch; default: leaf, selected: sprout
-    if(sender.selected == NO) {
-        
-        [sender setImage:self.biofilterButtonImageSprout
-                forState:UIControlStateSelected];
-        self.swapBiofilter++;
-        
-    } else if(sender.selected == YES) {
-        
-        [sender setImage:self.biofilterButtonImageLeaf
-                forState:UIControlStateNormal];
-        self.swapBiofilter--;
-    }
-    
-    sender.selected = !sender.selected;
-    
-}
-
-- (IBAction)rainButton:(UIButton *)sender {
-    
-    // Set center of rainEffectView to origin of map
-    // Animate from origin of map to bottom of map
-    
-    self.rainEffectView.frame = CGRectMake(self.cityImageView.frame.origin.x, self.cityImageView.frame.origin.y, self.rainEffectView.image.size.width, self.rainEffectView.image.size.height);
-    
-    self.rainEffectView.hidden = NO;
-    
-    [self.container addSubview:self.rainEffectView];
-    self.rainEffectView.center = self.cityImageView.frame.origin;
-    // wants bottom right corner of rainEffect to origin
-    
-    [UIView transitionWithView:self.rainEffectView
-                      duration:2
-                       options:0
-                    animations:^{
-                        self.rainEffectView.frame = CGRectMake(self.cityImageView.frame.origin.x, self.cityImageView.frame.origin.y, self.rainEffectView.image.size.width, self.rainEffectView.image.size.height);
-                    }
-                    completion:^(BOOL finished){
-                        self.rainEffectView.hidden = YES;
-                    }];
-    
-    
-}
-
-- (IBAction)arrowButton:(UIButton *)sender {
-    
-    // Press down on button unhides the arrowGrid
-    self.cityArrowGridView.hidden = NO;
-    
-}
-
-- (IBAction)arrowButtonRelease:(UIButton *)sender {
-    
-    // Releasing the arrow button hides the arrowGrid
-    self.cityArrowGridView.hidden = YES;
-    
-}
-
-- (void)placeBiofilterAtPoint:(CGPoint)mypoint{
-    
-    
-
-    
+- (void)placeBiofilterAtPoint:(CGPoint)mypoint
+{
     UIImageView * biofilterView;
     
     if (self.swapBiofilter == 0) { // places leaf at mypoint
@@ -332,22 +366,11 @@
     biofilterView.frame = CGRectMake(mypoint.x, mypoint.y, 20, 20);
     // #define constants at some point
     biofilterView.center = mypoint;
-    
 }
 
 
-
-- (void)setBudgetCount:(int)budgetCount {
-    
-    _budgetCount = budgetCount;
-    self.budgetLabel.text = [NSString stringWithFormat:@"$%d", self.budgetCount];
-    
-    
-}
-
-
-- (IBAction)mapDoubleTap:(UITapGestureRecognizer *)sender {
-    
+- (IBAction)mapDoubleTap:(UITapGestureRecognizer *)sender
+{
     CGPoint touched = [sender locationInView:self.container];
     CGPoint newtouched;
     newtouched.y = (8.0/320.0)*(touched.y);
