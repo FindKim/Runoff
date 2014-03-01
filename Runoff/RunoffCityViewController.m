@@ -277,8 +277,38 @@
     return sqrtf(powf((touched.x-data.x),2) + powf((touched.y-data.y),2));
 }
 
-- (CGPoint) getBiofilterLocation:(CGPoint) touched
-{
+- (int) getBiofilterGrade:(CGPoint) touched{
+    //loop through the NSArray locations to find x and y values that are closest to the touched point
+    //make a point that is from the dictionary
+    //find the distance between the points
+    //see if it is the smallest distance
+    //if it is then store the point
+    int grade;
+    float min = INFINITY;
+    float distance;
+    for(NSDictionary * myDict in self.locations){
+        CGPoint data = CGPointMake([myDict[@"x"] floatValue], [myDict[@"y"] floatValue]);
+        distance = [self distanceBetweenPoints:touched and: data];
+        if(distance < min){
+            min = distance;
+            //if sproat is selected
+            if(self.swapBiofilter ==1){
+                //get grade of biofilter
+                grade = [myDict[RO_K_GRADE_A] intValue];
+                NSLog(@"grade A has been placed");
+            }
+                //if leaf is selected
+            if(self.swapBiofilter == 0){
+                //get grade of biofilter
+                grade = [myDict[RO_K_GRADE_B] intValue];
+                NSLog(@"grade B has been placed");
+            }
+        }
+    }
+    return grade;
+}
+
+- (CGPoint) getBiofilterLocation:(CGPoint) touched{
     //loop through the NSArray locations to find x and y values that are closest to the touched point
     //make a point that is from the dictionary
     //find the distance between the points
