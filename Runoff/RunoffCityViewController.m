@@ -419,8 +419,9 @@
             // Checks if enough in budget
             // Add biofilter at mypoint
             // Reduces biofilter budget
-        }
+            }
     }
+    int grade = [self getBiofilterGrade: newtouched];
 }
 
 
