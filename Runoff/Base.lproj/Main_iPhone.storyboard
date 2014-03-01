@@ -48,6 +48,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.81176477670669556" green="0.92549026012420654" blue="0.88627457618713379" alpha="1" colorSpace="deviceRGB"/>
                         <color key="tintColor" red="0.71300725990000002" green="0.78775091240875916" blue="0.79000281539999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="yrl-EM-utC" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="0UU-6h-ekD"/>
                             <constraint firstAttribute="centerX" secondItem="Lf3-vF-r5h" secondAttribute="centerX" id="MTs-4d-ROv"/>
@@ -58,10 +59,18 @@
                             <constraint firstItem="Lf3-vF-r5h" firstAttribute="top" secondItem="eRU-Ia-fue" secondAttribute="bottom" constant="20" id="u0j-og-APk"/>
                             <constraint firstItem="YsS-Lf-bKw" firstAttribute="top" secondItem="Lf3-vF-r5h" secondAttribute="bottom" constant="40" id="vRi-u0-NIp"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="bKf-5q-N3J" appends="YES" id="erq-Nb-YKQ"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="aLG-iL-WKn"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="3" numberOfTouchesRequired="3" id="bKf-5q-N3J">
+                    <connections>
+                        <action selector="resetNSUserDefaults:" destination="vXZ-lx-hvc" id="QLB-VY-AaX"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-1492" y="-639"/>
         </scene>
