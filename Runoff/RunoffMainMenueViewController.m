@@ -22,10 +22,10 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)eent
 {
-//    if ([touches count] == 3) {
+    if ([touches count] == 3) {
     NSLog(@"Touch Starts");
     _holdTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(resetNSUserDefaults:) userInfo:nil repeats:NO];
-//    }
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
