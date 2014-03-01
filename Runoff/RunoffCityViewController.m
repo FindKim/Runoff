@@ -86,17 +86,9 @@
     return _biofilterButtonImageSprout;
 }
 
-
-- (BOOL)beenHere
+- (void)setBeenHere:(BOOL)value
 {
-    NSNumber *bRun = [[NSUserDefaults standardUserDefaults] valueForKey:@"beenHere"];
-    if (bRun) return YES;
-    return [bRun boolValue];
-}
-
-- (void)setBeenHere:(int)value
-{
-    [[NSUserDefaults standardUserDefaults] setInteger:value forKey:@"beenHere"];
+    [[NSUserDefaults standardUserDefaults] setBool:value forKey:@"beenHere"];
 }
 
 - (void)messages
@@ -162,12 +154,13 @@
         _budgetCount = RO_INITBUDGET;   // Initializes budget
     }
     
-    // First visit, display messages
-    NSLog(@"%d", [[NSUserDefaults standardUserDefaults] integerForKey:@"beenHere"]);
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"beenHere"] == 0) {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:@"beenHere"]);
+    if (![[[prefs dictionaryRepresentation] allKeys] containsObject:@"beenHere"]) {
         [self messages];
-        [self setBeenHere:1];
-        NSLog(@"the new value is %d", [[NSUserDefaults standardUserDefaults] integerForKey:@"beenHere"]);
+        NSLog(@"first visit, displaying messages");
+        [self setBeenHere:YES];
+        NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:@"beenHere"]);
     }
 }
 
