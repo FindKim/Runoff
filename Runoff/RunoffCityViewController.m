@@ -294,14 +294,14 @@
             //if sproat is selected
             if(self.swapBiofilter ==1){
                 //get grade of biofilter
-                grade = [myDict[RO_K_GRADE_A] intValue];
-                NSLog(@"grade A has been placed");
+                grade = [myDict[RO_K_GRADE_SPROUT] intValue];
+                //NSLog(@"grade Sprout has been placed");
             }
                 //if leaf is selected
             if(self.swapBiofilter == 0){
                 //get grade of biofilter
-                grade = [myDict[RO_K_GRADE_B] intValue];
-                NSLog(@"grade B has been placed");
+                grade = [myDict[RO_K_GRADE_LEAF] intValue];
+                //NSLog(@"grade Leaf has been placed");
             }
         }
     }
