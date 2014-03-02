@@ -17,6 +17,10 @@
 #define RO_BFCOST2 (125)
 
 #define RO_K_LEAF_IS_HERE (@"leaf is here")
+#define RO_K_SPROUT_IS_HERE (@"sprout is here")
+#define RO_K_NOTHING_IS_HERE (@"nothing is here")
+#define RO_K_BIOFILTER_HERE (@"what is the biofilter that is here")
+
 #define RO_K_GRADE_SPROUT (@"gradeSprout")
 #define RO_K_GRADE_LEAF (@"gradeLeaf")
 

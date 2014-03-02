@@ -186,6 +186,14 @@
     // Adds cityImageView back
     [self.container addSubview:self.cityImageView];
     [self.container addSubview:self.cityArrowGridView];
+  
+    
+    // Reset all grades and locations
+/*    for (self.locations;){
+        
+    }
+*/
+    
 }
 
 
@@ -245,6 +253,7 @@
                     completion:^(BOOL finished){
                         self.rainEffectView.hidden = YES;
                     }];
+    int grade = self.getBiofilterGrade;
 }
 
 
@@ -261,7 +270,7 @@
         NSMutableArray * mutLocation = [tempLoc mutableCopy];
         for(NSDictionary *dict in tempLoc){
             NSMutableDictionary * mutDict = [dict mutableCopy];
-            [mutDict setObject:@NO forKey:RO_K_LEAF_IS_HERE];
+            [mutDict setObject:RO_K_NOTHING_IS_HERE forKey:RO_K_BIOFILTER_HERE];
             mutLocation[i] = mutDict;
             i++;
         }
@@ -277,34 +286,30 @@
     return sqrtf(powf((touched.x-data.x),2) + powf((touched.y-data.y),2));
 }
 
-- (int) getBiofilterGrade:(CGPoint) touched{
+- (int) getBiofilterGrade{
     //loop through the NSArray locations to find x and y values that are closest to the touched point
     //make a point that is from the dictionary
     //find the distance between the points
     //see if it is the smallest distance
-    //if it is then store the point
-    int grade;
-    float min = INFINITY;
-    float distance;
+    int grade = 0;
     for(NSDictionary * myDict in self.locations){
-        CGPoint data = CGPointMake([myDict[@"x"] floatValue], [myDict[@"y"] floatValue]);
-        distance = [self distanceBetweenPoints:touched and: data];
-        if(distance < min){
-            min = distance;
-            //if sproat is selected
-            if(self.swapBiofilter ==1){
+
+            //if sprout is selected
+            //if([self.locations[RO_K_BIOFILTER_HERE] isEqualToString:RO_K_SPROUT_IS_HERE]){
+            if([myDict[RO_K_BIOFILTER_HERE] isEqualToString:RO_K_SPROUT_IS_HERE]){
                 //get grade of biofilter
-                grade = [myDict[RO_K_GRADE_SPROUT] intValue];
-                //NSLog(@"grade Sprout has been placed");
+                grade += [myDict[RO_K_GRADE_SPROUT] intValue];
+                NSLog(@"grade Sprout has been placed");
             }
                 //if leaf is selected
-            if(self.swapBiofilter == 0){
+            //else if([self.locations[RO_K_BIOFILTER_HERE] isEqualToString:RO_K_LEAF_IS_HERE]){
+            else if([myDict[RO_K_BIOFILTER_HERE] isEqualToString:RO_K_LEAF_IS_HERE]){
                 //get grade of biofilter
-                grade = [myDict[RO_K_GRADE_LEAF] intValue];
+                grade += [myDict[RO_K_GRADE_LEAF] intValue];
                 //NSLog(@"grade Leaf has been placed");
             }
-        }
     }
+    NSLog(@"getBiofilerGrade ran, total grade equals = %d", grade);
     return grade;
 }
 
@@ -344,14 +349,19 @@
         distance = [self distanceBetweenPoints:touched and: data];
         if(distance < min){
             min = distance;
-            pointIsHere = [myDict[RO_K_LEAF_IS_HERE] boolValue];
+            if (![myDict[RO_K_BIOFILTER_HERE] isEqualToString:RO_K_NOTHING_IS_HERE]){
+                pointIsHere = YES;
+            }
+            else{
+                pointIsHere = NO;
+            }
         }
     }
     return pointIsHere;
 }
 
 
-- (void) setBiofilterHere:(CGPoint) touched to:(BOOL)hereOrNot
+- (void) setBiofilterHere:(CGPoint) touched to:(NSString *)LeafOrSproutOrNil
 {
     //loop through the NSArray locations to find x and y values that are closest to the touched point
     //make a point that is from the dictionary
@@ -369,7 +379,7 @@
             shortestPoint = myDict;
         }
     }
-    shortestPoint[RO_K_LEAF_IS_HERE] = [NSNumber numberWithBool:hereOrNot];
+    shortestPoint[RO_K_BIOFILTER_HERE] = LeafOrSproutOrNil;
 }
 
 
@@ -420,7 +430,7 @@
             // Deletes biofilter if tap is on exisiting biofilter
             if (CGRectContainsPoint(view.frame, touched)) {
                 //set "leaf is not here"
-                [self setBiofilterHere:newtouched to:NO];
+                [self setBiofilterHere:newtouched to:RO_K_NOTHING_IS_HERE];
 
                 // Checks which type deleted to refund cost
                 // Removes biofilter at touched point
@@ -440,7 +450,12 @@
     }
         // If deletion doesn't occur AND there is no biofilter
         if(deleted == 0 && !biofilterIsHere){
-            [self setBiofilterHere:newtouched to:YES];
+            if (self.swapBiofilter == 1){
+                [self setBiofilterHere:newtouched to: RO_K_SPROUT_IS_HERE];
+            }
+            else{
+                [self setBiofilterHere:newtouched to: RO_K_LEAF_IS_HERE];
+            }
             if ((self.swapBiofilter == 0 && self.budgetCount >= RO_BFCOST1) ||
                 (self.swapBiofilter == 1 && self.budgetCount >= RO_BFCOST2)) {
                 [self placeBiofilterAtPoint:mypoint];
@@ -451,7 +466,6 @@
             // Reduces biofilter budget
             }
     }
-    int grade = [self getBiofilterGrade: newtouched];
 }
 
 
