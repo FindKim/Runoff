@@ -20,6 +20,8 @@
 @property (nonatomic, strong) UIImage *biofilterImageSprout;
 @property (nonatomic, strong) UIImage *biofilterButtonImageLeaf;
 @property (nonatomic, strong) UIImage *biofilterButtonImageSprout;
+@property (nonatomic, strong) UIImage *pollutedWater;
+@property (nonatomic, strong) UIImageView *pollutedWaterView;
 @property (nonatomic, strong) UIView *container;
 @property (weak, nonatomic) IBOutlet UILabel *budgetLabel;
 @property (nonatomic) int budgetCount;
@@ -86,6 +88,14 @@
     return _biofilterButtonImageSprout;
 }
 
+- (UIImage *)pollutedWater
+{
+    if(!_pollutedWater) {
+        _pollutedWater = [UIImage imageNamed:@"PollutedWater"];
+    }
+    return _pollutedWater;
+}
+
 - (void)setBeenHere:(BOOL)value
 {
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:@"beenHere"];
@@ -127,15 +137,20 @@
     self.cityArrowGrid = [UIImage imageNamed:@"ArrowGrid1"];
     self.cityArrowGridView = [[UIImageView alloc] initWithImage:self.cityArrowGrid];
     self.cityArrowGridView.frame = CGRectMake(0, 0, self.scrollViewCityGrid.bounds.size.width, self.scrollViewCityGrid.bounds.size.width);
-    self.container = [[UIView alloc] initWithFrame:self.cityArrowGridView.frame];
+    
+    //polluted water
+    self.pollutedWater = [UIImage imageNamed:@"PollutedWater"];
+    self.pollutedWaterView = [[UIImageView alloc] initWithImage:self.pollutedWater];
+    self.pollutedWaterView.frame = self.cityImageView.frame;
     
     [self.scrollViewCityGrid addSubview:self.container];
     [self.container addSubview:self.cityImageView];
     [self.container addSubview:self.cityArrowGridView];
+    [self.container addSubview:self.pollutedWaterView];
     
-    // Hides top layer, arrowGrid, displays cityImage
+    // Hides top layer, arrowGrid, polluted water, displays cityImage
     self.cityArrowGridView.hidden = YES;
-    
+    self.pollutedWaterView.hidden = YES;
     self.scrollViewCityGrid.contentSize = self.container.bounds.size;
     
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
@@ -186,13 +201,17 @@
     // Adds cityImageView back
     [self.container addSubview:self.cityImageView];
     [self.container addSubview:self.cityArrowGridView];
+    [self.container addSubview:self.pollutedWaterView];
+    
+    //Reset Water Color
+    self.pollutedWaterView.hidden = YES;
   
     
     // Reset all grades and locations
-/*    for (self.locations;){
-        
+    for(NSMutableDictionary * myDict in self.locations){
+            [myDict setObject:RO_K_NOTHING_IS_HERE forKey:RO_K_BIOFILTER_HERE];
     }
-*/
+
     
 }
 
@@ -252,8 +271,24 @@
                     }
                     completion:^(BOOL finished){
                         self.rainEffectView.hidden = YES;
+                        
+                        //Calculate grade and display change of water if necessary
+                        int grade = self.getBiofilterGrade;
+                        //Calculate alpha = grade/(highest score);
+                        //find highest score
+                        //Linear then flatten out??
+                        if (grade <= 30) { //got a low score
+                            self.pollutedWaterView.alpha = 0.8; //darkest water
+                        }
+                        else if (grade >= 31 && grade <= 45) { //got a middle score
+                            self.pollutedWaterView.alpha = 0.4; //dark water
+                        }
+                        else if (grade >= 46) {
+                            self.pollutedWaterView.alpha = 0;
+                        }
+                        self.pollutedWaterView.hidden = NO; //remove hidden polluted water view
+
                     }];
-    int grade = self.getBiofilterGrade;
 }
 
 
@@ -425,7 +460,7 @@
     // Loops through all subviews for existing biofilters
     for (UIImageView *view in self.container.subviews) {
         
-        if(view != self.cityImageView && view != self.cityArrowGridView) {    // Ignores cityView
+        if(view != self.cityImageView && view != self.cityArrowGridView && view != self.pollutedWaterView) {    // Ignores cityView
             
             // Deletes biofilter if tap is on exisiting biofilter
             if (CGRectContainsPoint(view.frame, touched)) {
