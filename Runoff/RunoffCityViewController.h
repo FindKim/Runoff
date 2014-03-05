@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface RunoffCityViewController : UIViewController
+@property (nonatomic, strong) NSString * dataFileName;
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)sender;
 
