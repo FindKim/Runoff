@@ -16,6 +16,8 @@
 #define RO_BFCOST1 (75)
 #define RO_BFCOST2 (125)
 
+#define RO_K_BEEN_HERE (@"beenHere")
+
 #define RO_K_LEAF_IS_HERE (@"leaf is here")
 #define RO_K_GRADE_A (@"gradeA")
 #define RO_K_GRADE_B (@"gradeB")
