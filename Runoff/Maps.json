@@ -1,15 +1,15 @@
  [
   
-  {"Map_locations":"Data.json",
+  {"Map_locations":"Data",
   "Map_name":"City1"},
   
-  {"Map_locations":"Map_2.json",
+  {"Map_locations":"Map_2",
   "Map_name":"City2"},
   
-  {"Map_locations":"Map_3.json",
+  {"Map_locations":"Map_3",
   "Map_name":"City3"},
   
-  {"Map_locations":"Map_4.json",
+  {"Map_locations":"Map_4",
   "Map_name":"City4"}
   
   ]

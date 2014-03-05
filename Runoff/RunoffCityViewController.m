@@ -296,7 +296,7 @@
 {
     //Json Data
     if (!_locations) {
-        NSData* locData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Data" ofType:@"json"]];
+        NSData* locData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:self.dataFileName ofType:@"json"]];
         
         NSError * error;
         NSArray * tempLoc;
