@@ -98,7 +98,7 @@
 
 - (void)setBeenHere:(BOOL)value
 {
-    [[NSUserDefaults standardUserDefaults] setBool:value forKey:@"beenHere"];
+    [[NSUserDefaults standardUserDefaults] setBool:value forKey:RO_K_BEEN_HERE];
 }
 
 - (void)messages
@@ -156,7 +156,6 @@
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
     self.scrollViewCityGrid.maximumZoomScale = 4.0; // twice its normal size
     self.scrollViewCityGrid.delegate = self;
-    
 }
 
 
@@ -170,12 +169,12 @@
     }
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:@"beenHere"]);
-    if (![[[prefs dictionaryRepresentation] allKeys] containsObject:@"beenHere"]) {
-        [self messages];
+    NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:RO_K_BEEN_HERE]);
+    if (![[[prefs dictionaryRepresentation] allKeys] containsObject:RO_K_BEEN_HERE]) {
+        [self messages];    // Calls instruction messages only on first visit
         NSLog(@"first visit, displaying messages");
         [self setBeenHere:YES];
-        NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:@"beenHere"]);
+        NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:RO_K_BEEN_HERE]);
     }
 }
 
@@ -233,7 +232,6 @@
     }
     
     sender.selected = !sender.selected;
-    
 }
 
 
@@ -494,7 +492,6 @@
             if ((self.swapBiofilter == 0 && self.budgetCount >= RO_BFCOST1) ||
                 (self.swapBiofilter == 1 && self.budgetCount >= RO_BFCOST2)) {
                 [self placeBiofilterAtPoint:mypoint];
- //               self.biofilterCount++;
             
             // Checks if enough in budget
             // Add biofilter at mypoint

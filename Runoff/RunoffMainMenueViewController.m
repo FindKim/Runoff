@@ -7,6 +7,7 @@
 //
 
 #import "RunoffMainMenueViewController.h"
+#import "Constants.h"
 
 @interface RunoffMainMenueViewController ()
 @property (nonatomic, strong) NSTimer *holdTimer;
@@ -20,52 +21,15 @@
     self.navigationController.navigationBar.hidden = YES;
 }
 
+// 3 finger touch hold to reset
 - (IBAction)resetNSUserDefaults:(id)sender
 {
-    // Removes "beenHere" key--displays messages firt visit to City View
+    // Removes "beenHere" key--displays messages first visit to City View
     NSLog(@"Defaults reseted");
     NSDictionary *defaultDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
     for (NSString *key in [defaultDictionary allKeys])
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"beenHere"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:RO_K_BEEN_HERE];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
-
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)eent
-//{
-//    if ([touches count] == 3) {
-//    NSLog(@"Touch Starts");
-//    _holdTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(resetNSUserDefaults:) userInfo:nil repeats:NO];
-//    }
-//}
-//
-//- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    if ([_holdTimer isValid]) {
-//        [_holdTimer invalidate];
-//        self.holdTimer = nil;
-//        NSLog(@"Touch moved");
-//    }
-//}
-//
-//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    if ([_holdTimer isValid]) {
-//        [_holdTimer invalidate];
-//        self.holdTimer = nil;
-//        NSLog(@"Touch ended early");
-//    }
-//}
-//
-//- (void)resetNSUserDefaults:(NSTimer *)theTimer
-//{
-//    // Removes "beenHere" key--displays messages firt visit to City View
-//    NSLog(@"Defaults reseted");
-//    NSDictionary *defaultDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
-//    for (NSString *key in [defaultDictionary allKeys])
-//        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"beenHere"];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
-//
-//    self.holdTimer = nil;
-//}
 
 @end
