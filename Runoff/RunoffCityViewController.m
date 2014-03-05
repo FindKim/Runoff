@@ -20,6 +20,8 @@
 @property (nonatomic, strong) UIImage *biofilterImageSprout;
 @property (nonatomic, strong) UIImage *biofilterButtonImageLeaf;
 @property (nonatomic, strong) UIImage *biofilterButtonImageSprout;
+@property (nonatomic, strong) UIImage *pollutedWater;
+@property (nonatomic, strong) UIImageView *pollutedWaterView;
 @property (nonatomic, strong) UIView *container;
 @property (weak, nonatomic) IBOutlet UILabel *budgetLabel;
 @property (nonatomic) int budgetCount;
@@ -86,6 +88,14 @@
     return _biofilterButtonImageSprout;
 }
 
+- (UIImage *)pollutedWater
+{
+    if(!_pollutedWater) {
+        _pollutedWater = [UIImage imageNamed:@"PollutedWater"];
+    }
+    return _pollutedWater;
+}
+
 - (void)setBeenHere:(BOOL)value
 {
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:RO_K_BEEN_HERE];
@@ -127,15 +137,20 @@
     self.cityArrowGrid = [UIImage imageNamed:@"ArrowGrid1"];
     self.cityArrowGridView = [[UIImageView alloc] initWithImage:self.cityArrowGrid];
     self.cityArrowGridView.frame = CGRectMake(0, 0, self.scrollViewCityGrid.bounds.size.width, self.scrollViewCityGrid.bounds.size.width);
-    self.container = [[UIView alloc] initWithFrame:self.cityArrowGridView.frame];
+    
+    //polluted water
+    self.pollutedWater = [UIImage imageNamed:@"PollutedWater"];
+    self.pollutedWaterView = [[UIImageView alloc] initWithImage:self.pollutedWater];
+    self.pollutedWaterView.frame = self.cityImageView.frame;
     
     [self.scrollViewCityGrid addSubview:self.container];
     [self.container addSubview:self.cityImageView];
     [self.container addSubview:self.cityArrowGridView];
+    [self.container addSubview:self.pollutedWaterView];
     
-    // Hides top layer, arrowGrid, displays cityImage
+    // Hides top layer, arrowGrid, polluted water, displays cityImage
     self.cityArrowGridView.hidden = YES;
-    
+    self.pollutedWaterView.hidden = YES;
     self.scrollViewCityGrid.contentSize = self.container.bounds.size;
     
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
@@ -185,6 +200,18 @@
     // Adds cityImageView back
     [self.container addSubview:self.cityImageView];
     [self.container addSubview:self.cityArrowGridView];
+    [self.container addSubview:self.pollutedWaterView];
+    
+    //Reset Water Color
+    self.pollutedWaterView.hidden = YES;
+  
+    
+    // Reset all grades and locations
+    for(NSMutableDictionary * myDict in self.locations){
+            [myDict setObject:RO_K_NOTHING_IS_HERE forKey:RO_K_BIOFILTER_HERE];
+    }
+
+    
 }
 
 
@@ -242,6 +269,23 @@
                     }
                     completion:^(BOOL finished){
                         self.rainEffectView.hidden = YES;
+                        
+                        //Calculate grade and display change of water if necessary
+                        int grade = self.getBiofilterGrade;
+                        //Calculate alpha = grade/(highest score);
+                        //find highest score
+                        //Linear then flatten out??
+                        if (grade <= 30) { //got a low score
+                            self.pollutedWaterView.alpha = 0.8; //darkest water
+                        }
+                        else if (grade >= 31 && grade <= 45) { //got a middle score
+                            self.pollutedWaterView.alpha = 0.4; //dark water
+                        }
+                        else if (grade >= 46) {
+                            self.pollutedWaterView.alpha = 0;
+                        }
+                        self.pollutedWaterView.hidden = NO; //remove hidden polluted water view
+
                     }];
 }
 
@@ -259,7 +303,7 @@
         NSMutableArray * mutLocation = [tempLoc mutableCopy];
         for(NSDictionary *dict in tempLoc){
             NSMutableDictionary * mutDict = [dict mutableCopy];
-            [mutDict setObject:@NO forKey:RO_K_LEAF_IS_HERE];
+            [mutDict setObject:RO_K_NOTHING_IS_HERE forKey:RO_K_BIOFILTER_HERE];
             mutLocation[i] = mutDict;
             i++;
         }
@@ -275,34 +319,30 @@
     return sqrtf(powf((touched.x-data.x),2) + powf((touched.y-data.y),2));
 }
 
-- (int) getBiofilterGrade:(CGPoint) touched{
+- (int) getBiofilterGrade{
     //loop through the NSArray locations to find x and y values that are closest to the touched point
     //make a point that is from the dictionary
     //find the distance between the points
     //see if it is the smallest distance
-    //if it is then store the point
-    int grade;
-    float min = INFINITY;
-    float distance;
+    int grade = 0;
     for(NSDictionary * myDict in self.locations){
-        CGPoint data = CGPointMake([myDict[@"x"] floatValue], [myDict[@"y"] floatValue]);
-        distance = [self distanceBetweenPoints:touched and: data];
-        if(distance < min){
-            min = distance;
-            //if sproat is selected
-            if(self.swapBiofilter ==1){
+
+            //if sprout is selected
+            //if([self.locations[RO_K_BIOFILTER_HERE] isEqualToString:RO_K_SPROUT_IS_HERE]){
+            if([myDict[RO_K_BIOFILTER_HERE] isEqualToString:RO_K_SPROUT_IS_HERE]){
                 //get grade of biofilter
-                grade = [myDict[RO_K_GRADE_A] intValue];
-                NSLog(@"grade A has been placed");
+                grade += [myDict[RO_K_GRADE_SPROUT] intValue];
+                NSLog(@"grade Sprout has been placed");
             }
                 //if leaf is selected
-            if(self.swapBiofilter == 0){
+            //else if([self.locations[RO_K_BIOFILTER_HERE] isEqualToString:RO_K_LEAF_IS_HERE]){
+            else if([myDict[RO_K_BIOFILTER_HERE] isEqualToString:RO_K_LEAF_IS_HERE]){
                 //get grade of biofilter
-                grade = [myDict[RO_K_GRADE_B] intValue];
-                NSLog(@"grade B has been placed");
+                grade += [myDict[RO_K_GRADE_LEAF] intValue];
+                //NSLog(@"grade Leaf has been placed");
             }
-        }
     }
+    NSLog(@"getBiofilerGrade ran, total grade equals = %d", grade);
     return grade;
 }
 
@@ -342,14 +382,19 @@
         distance = [self distanceBetweenPoints:touched and: data];
         if(distance < min){
             min = distance;
-            pointIsHere = [myDict[RO_K_LEAF_IS_HERE] boolValue];
+            if (![myDict[RO_K_BIOFILTER_HERE] isEqualToString:RO_K_NOTHING_IS_HERE]){
+                pointIsHere = YES;
+            }
+            else{
+                pointIsHere = NO;
+            }
         }
     }
     return pointIsHere;
 }
 
 
-- (void) setBiofilterHere:(CGPoint) touched to:(BOOL)hereOrNot
+- (void) setBiofilterHere:(CGPoint) touched to:(NSString *)LeafOrSproutOrNil
 {
     //loop through the NSArray locations to find x and y values that are closest to the touched point
     //make a point that is from the dictionary
@@ -367,7 +412,7 @@
             shortestPoint = myDict;
         }
     }
-    shortestPoint[RO_K_LEAF_IS_HERE] = [NSNumber numberWithBool:hereOrNot];
+    shortestPoint[RO_K_BIOFILTER_HERE] = LeafOrSproutOrNil;
 }
 
 
@@ -413,12 +458,12 @@
     // Loops through all subviews for existing biofilters
     for (UIImageView *view in self.container.subviews) {
         
-        if(view != self.cityImageView && view != self.cityArrowGridView) {    // Ignores cityView
+        if(view != self.cityImageView && view != self.cityArrowGridView && view != self.pollutedWaterView) {    // Ignores cityView
             
             // Deletes biofilter if tap is on exisiting biofilter
             if (CGRectContainsPoint(view.frame, touched)) {
                 //set "leaf is not here"
-                [self setBiofilterHere:newtouched to:NO];
+                [self setBiofilterHere:newtouched to:RO_K_NOTHING_IS_HERE];
 
                 // Checks which type deleted to refund cost
                 // Removes biofilter at touched point
@@ -438,7 +483,12 @@
     }
         // If deletion doesn't occur AND there is no biofilter
         if(deleted == 0 && !biofilterIsHere){
-            [self setBiofilterHere:newtouched to:YES];
+            if (self.swapBiofilter == 1){
+                [self setBiofilterHere:newtouched to: RO_K_SPROUT_IS_HERE];
+            }
+            else{
+                [self setBiofilterHere:newtouched to: RO_K_LEAF_IS_HERE];
+            }
             if ((self.swapBiofilter == 0 && self.budgetCount >= RO_BFCOST1) ||
                 (self.swapBiofilter == 1 && self.budgetCount >= RO_BFCOST2)) {
                 [self placeBiofilterAtPoint:mypoint];
