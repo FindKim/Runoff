@@ -16,6 +16,7 @@
 @property (nonatomic, strong) UIImageView *cityImageView;
 @property (nonatomic, strong) UIImage *cityArrowGrid;
 @property (nonatomic, strong) UIImageView *cityArrowGridView;
+@property (nonatomic, strong) UIImageView *cityViewMask;
 @property (nonatomic, strong) UIImage *biofilterImageLeaf;
 @property (nonatomic, strong) UIImage *biofilterImageSprout;
 @property (nonatomic, strong) UIImage *biofilterButtonImageLeaf;
@@ -47,12 +48,21 @@
     return _cityImage;
 }
 
-- (UIImageView *)rainEffectView
+- (UIImageView *)cityViewMask
 {
-    if (!_rainEffectView) {
-        _rainEffectView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"Rain Effect"]];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
+    
+    if (!_cityViewMask) {
+ 
+        if (screenHeight < RO_HEIGHT_IPHONE4) {
+            _cityViewMask = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"iPhone 3 mask"]];
+        
+        } else if (screenHeight >= RO_HEIGHT_IPHONE4) {
+            _cityViewMask = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"iPhone 4 mask"]];
+        }
     }
-    return _rainEffectView;
+    return _cityViewMask;
 }
 
 - (UIImage *)biofilterImageLeaf
@@ -134,6 +144,8 @@
     // 320 = height of image (square)
     self.container = [[UIView alloc] initWithFrame:self.cityImageView.frame];
     
+    NSLog(@"The height of cityImage is %f", self.cityImageView.frame.size.height);
+    
     self.cityArrowGrid = [UIImage imageNamed:@"ArrowGrid1"];
     self.cityArrowGridView = [[UIImageView alloc] initWithImage:self.cityArrowGrid];
     self.cityArrowGridView.frame = CGRectMake(0, 0, self.scrollViewCityGrid.bounds.size.width, self.scrollViewCityGrid.bounds.size.width);
@@ -143,14 +155,20 @@
     self.pollutedWaterView = [[UIImageView alloc] initWithImage:self.pollutedWater];
     self.pollutedWaterView.frame = self.cityImageView.frame;
     
+    self.rainEffectView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Rain Effect"]];
+    
     [self.scrollViewCityGrid addSubview:self.container];
     [self.container addSubview:self.cityImageView];
-    [self.container addSubview:self.cityArrowGridView];
     [self.container addSubview:self.pollutedWaterView];
+    [self.container addSubview:self.cityArrowGridView];
+    [self.container addSubview:self.rainEffectView];
+    [self.container addSubview:self.cityViewMask];
+    // This masks the rain animation that is larger than citygrid
     
     // Hides top layer, arrowGrid, polluted water, displays cityImage
     self.cityArrowGridView.hidden = YES;
     self.pollutedWaterView.hidden = YES;
+    self.rainEffectView.hidden = YES;
     self.scrollViewCityGrid.contentSize = self.container.bounds.size;
     
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
@@ -199,11 +217,16 @@
     
     // Adds cityImageView back
     [self.container addSubview:self.cityImageView];
-    [self.container addSubview:self.cityArrowGridView];
     [self.container addSubview:self.pollutedWaterView];
+    [self.container addSubview:self.cityArrowGridView];
+    [self.container addSubview:self.rainEffectView];
+    [self.container addSubview:self.cityViewMask];
+    // This masks the rain animation that is larger than citygrid
     
     //Reset Water Color
     self.pollutedWaterView.hidden = YES;
+    self.rainEffectView.hidden = YES;
+    self.cityArrowGridView.hidden = YES;
   
     
     // Reset all grades and locations
@@ -257,7 +280,6 @@
     
     self.rainEffectView.hidden = NO;
     
-    [self.container addSubview:self.rainEffectView];
     self.rainEffectView.center = self.cityImageView.frame.origin;
     // wants bottom right corner of rainEffect to origin
     

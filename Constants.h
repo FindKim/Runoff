@@ -26,6 +26,6 @@
 #define RO_K_GRADE_SPROUT (@"gradeSprout")
 #define RO_K_GRADE_LEAF (@"gradeLeaf")
 
-
+#define RO_HEIGHT_IPHONE4 (560)
 
 #endif
