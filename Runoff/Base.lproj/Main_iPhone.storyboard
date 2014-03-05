@@ -144,7 +144,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="109" id="lfg-An-7gg" customClass="RunoffCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RunoffCell" rowHeight="109" id="lfg-An-7gg" customClass="RunoffCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="109"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lfg-An-7gg" id="oZx-vs-hYC">
@@ -170,6 +170,10 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="alS-pt-dC8" id="fo9-ZT-k2J"/>
+                                    <outlet property="delegate" destination="alS-pt-dC8" id="JUg-Yk-8Y7"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.85098046064376831" green="0.93725496530532837" blue="0.90196084976196289" alpha="1" colorSpace="deviceRGB"/>
