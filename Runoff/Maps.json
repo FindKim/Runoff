@@ -1,15 +1,19 @@
  [
   
   {"Map_locations":"Data",
-  "Map_name":"City1"},
+  "Map_name":"City1",
+  "Map_Label":"EiE City"},
   
   {"Map_locations":"Map_2",
-  "Map_name":"City2"},
+  "Map_name":"City2",
+  "Map_Label":"Boston"},
   
   {"Map_locations":"Map_3",
-  "Map_name":"City3"},
+  "Map_name":"City3",
+  "Map_Label":"Raleigh"},
   
   {"Map_locations":"Map_4",
-  "Map_name":"City4"}
+  "Map_name":"City4",
+  "Map_Label":"San Francisco"}
   
   ]

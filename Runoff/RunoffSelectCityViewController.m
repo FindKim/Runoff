@@ -50,6 +50,7 @@
     NSString *cellID = @"RunoffCell";
     RunoffCell * cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     cell.BioCityImageView.image =[UIImage imageNamed:[(NSDictionary *)self.MapArray[indexPath.row]  objectForKey:@"Map_name"]] ;
+    cell.BioCityLabel.text =[(NSDictionary *)self.MapArray[indexPath.row]  objectForKey:@"Map_Label"];
     NSLog(@"Name is here");
     return cell;
 
