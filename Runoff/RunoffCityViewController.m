@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UIImage *cityArrowGrid;
 @property (nonatomic, strong) UIImageView *cityArrowGridView;
 @property (nonatomic, strong) UIImageView *cityViewMask;
+@property (nonatomic, strong) UIImageView *messageReset;
 @property (nonatomic, strong) UIImage *biofilterImageLeaf;
 @property (nonatomic, strong) UIImage *biofilterImageSprout;
 @property (nonatomic, strong) UIImage *biofilterButtonImageLeaf;
@@ -114,7 +115,7 @@
 - (void)messages
 {
     NSLog(@"This is after messages");
-
+    self.messageReset = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"iPhone4 Reset"]];
         // code for pop up here
 }
 
