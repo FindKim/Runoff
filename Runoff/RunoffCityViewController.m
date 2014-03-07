@@ -39,6 +39,8 @@
 @property (nonatomic, strong) NSMutableArray *myArray;
 @property (nonatomic, assign) int messageIndex;
 
+@property (nonatomic, strong) UIImageView *gradeMessageView;
+
 - (IBAction)resetButton:(UIButton *)sender;
 - (IBAction)biofilterButton:(UIButton *)sender;
 - (IBAction)rainButton:(UIButton *)sender;
@@ -135,6 +137,11 @@
 {
     self.messageIndex = 0;
     self.messageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.messageView.frame = CGRectMake(self.messageView.frame.origin.x,
+                                        self.messageView.frame.origin.y + 64,
+                                        self.messageView.frame.size.width,
+                                        self.messageView.frame.size.height-64);
+    
     self.messageView.userInteractionEnabled = YES;
     
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
@@ -162,6 +169,35 @@
     self.myArray = [array copy];
     self.messageView.image = self.myArray[self.messageIndex++];
     NSLog(@"This is after messages");
+}
+
+
+- (void)handleGestureGrade:(UIGestureRecognizer *)gestureRecognizer
+{
+    self.gradeMessageView.hidden = YES;
+
+}
+
+- (void)messagesGrade
+{
+    self.gradeMessageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.gradeMessageView.frame = CGRectMake(self.gradeMessageView.frame.origin.x,
+                                        self.gradeMessageView.frame.origin.y + 64,
+                                        self.gradeMessageView.frame.size.width,
+                                        self.gradeMessageView.frame.size.height-64);
+    
+    self.gradeMessageView.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGestureGrade:)];
+    doubleTap.numberOfTapsRequired = 2;
+    
+    [self.gradeMessageView addGestureRecognizer:doubleTap];
+    
+    [self.view addSubview:self.gradeMessageView];
+    
+    self.gradeMessageView.hidden = YES;
+
+    NSLog(@"This is after grading");
 }
 
 
@@ -232,15 +268,19 @@
         _budgetCount = RO_INITBUDGET;   // Initializes budget
     }
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:RO_K_BEEN_HERE]);
-//    if (![[[prefs dictionaryRepresentation] allKeys] containsObject:RO_K_BEEN_HERE]) {
-    if ([[[prefs dictionaryRepresentation] allKeys] containsObject:RO_K_BEEN_HERE] == 0) {
-        [self messages];    // Calls instruction messages only on first visit
-        [self.view addSubview:self.messageView];
-        NSLog(@"first visit, displaying messages");
-        [self setBeenHere:YES];
+    if (!self.gradeMessageView) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:RO_K_BEEN_HERE]);
+        
+        if ([[[prefs dictionaryRepresentation] allKeys] containsObject:RO_K_BEEN_HERE] == 0) {
+            [self messages];    // Calls instruction messages only on first visit
+            [self.view addSubview:self.messageView];
+            NSLog(@"first visit, displaying messages");
+            [self setBeenHere:YES];
+            NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:RO_K_BEEN_HERE]);
+        }
+        [self messagesGrade];
+
     }
 }
 
@@ -321,15 +361,18 @@
 
 - (IBAction)rainButton:(UIButton *)sender
 {
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
+    
     // Set center of rainEffectView to origin of map
     // Animate from origin of map to bottom of map
     
     self.rainEffectView.frame = CGRectMake(self.cityImageView.frame.origin.x, self.cityImageView.frame.origin.y, self.rainEffectView.image.size.width, self.rainEffectView.image.size.height);
     
-    self.rainEffectView.hidden = NO;
-    
     self.rainEffectView.center = self.cityImageView.frame.origin;
     // wants bottom right corner of rainEffect to origin
+    
+    self.rainEffectView.hidden = NO;
     
     [UIView transitionWithView:self.rainEffectView
                       duration:2
@@ -347,16 +390,36 @@
                         //Linear then flatten out??
                         if (grade <= 30) { //got a low score
                             self.pollutedWaterView.alpha = 0.8; //darkest water
+                            if (screenHeight >= RO_HEIGHT_IPHONE4) {
+                                self.gradeMessageView.image = [UIImage imageNamed:RO_MESSAGE_GRADE_IPHONE4_C];
+                            } else if (screenHeight < RO_HEIGHT_IPHONE4) {
+                                self.gradeMessageView.image = [UIImage imageNamed:RO_MESSAGE_GRADE_IPHONE3_C];
+                            }
+                            self.gradeMessageView.hidden = NO;
                         }
                         else if (grade >= 31 && grade <= 45) { //got a middle score
                             self.pollutedWaterView.alpha = 0.4; //dark water
+                            if (screenHeight >= RO_HEIGHT_IPHONE4) {
+                                self.gradeMessageView.image = [UIImage imageNamed:RO_MESSAGE_GRADE_IPHONE4_B];
+                            } else if (screenHeight < RO_HEIGHT_IPHONE4) {
+                                self.gradeMessageView.image = [UIImage imageNamed:RO_MESSAGE_GRADE_IPHONE3_B];
+                            }
+                            self.gradeMessageView.hidden = NO;
                         }
                         else if (grade >= 46) {
                             self.pollutedWaterView.alpha = 0;
+                            if (screenHeight >= RO_HEIGHT_IPHONE4) {
+                                self.gradeMessageView.image = [UIImage imageNamed:RO_MESSAGE_GRADE_IPHONE4_A];
+                            } else if (screenHeight < RO_HEIGHT_IPHONE4) {
+                                self.gradeMessageView.image = [UIImage imageNamed:RO_MESSAGE_GRADE_IPHONE3_A];
+                            }
+                            self.gradeMessageView.hidden = NO;
                         }
                         self.pollutedWaterView.hidden = NO; //remove hidden polluted water view
-
                     }];
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+    doubleTap.numberOfTapsRequired = 2;
+    [self.messageView addGestureRecognizer:doubleTap];
 }
 
 
@@ -528,7 +591,13 @@
     // Loops through all subviews for existing biofilters
     for (UIImageView *view in self.container.subviews) {
         
-        if(view != self.cityImageView && view != self.cityArrowGridView && view != self.pollutedWaterView) {    // Ignores cityView
+        if(view != self.cityImageView &&
+           view != self.cityArrowGridView &&
+           view != self.pollutedWaterView &&
+           view != self.rainEffectView &&
+           view != self.cityViewMask &&
+           view != self.messageView &&
+           view != self.gradeMessageView) {    // Ignores cityView
             
             // Deletes biofilter if tap is on exisiting biofilter
             if (CGRectContainsPoint(view.frame, touched)) {
