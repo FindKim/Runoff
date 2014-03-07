@@ -26,6 +26,12 @@
 #define RO_K_GRADE_SPROUT (@"gradeSprout")
 #define RO_K_GRADE_LEAF (@"gradeLeaf")
 
+#define RO_HEIGHT_IPHONE4 (560)
 
+#define RO_MESSAGE_IMAGE_NAME_ARRAY_IPHONE4 (@[@"iPhone4 Biofilter", @"iPhone4 Arrows", @"iPhone4 Rain", @"iPhone4 Reset"])
+#define RO_MESSAGE_IMAGE_NAME_ARRAY_IPHONE3 (@[@"iPhone3 Biofilter", @"iPhone3 Arrows", @"iPhone3 Rain", @"iPhone3 Reset"])
+
+#define RO_MESSAGE_GRADE_NAME_ARRAY_IPHONE4 (@[@"iPhone4 GradeA", @"iPhone4 GradeB", @"iPhone4 GradeC"])
+#define RO_MESSAGE_GRADE_NAME_ARRAY_IPHONE3 (@[@"iPhone3 GradeA", @"iPhone3 GradeB", @"iPhone3 GradeC"])
 
 #endif

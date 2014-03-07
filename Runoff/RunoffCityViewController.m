@@ -16,19 +16,28 @@
 @property (nonatomic, strong) UIImageView *cityImageView;
 @property (nonatomic, strong) UIImage *cityArrowGrid;
 @property (nonatomic, strong) UIImageView *cityArrowGridView;
+@property (nonatomic, strong) UIImageView *cityViewMask;
+
 @property (nonatomic, strong) UIImage *biofilterImageLeaf;
 @property (nonatomic, strong) UIImage *biofilterImageSprout;
 @property (nonatomic, strong) UIImage *biofilterButtonImageLeaf;
 @property (nonatomic, strong) UIImage *biofilterButtonImageSprout;
+
 @property (nonatomic, strong) UIImage *pollutedWater;
 @property (nonatomic, strong) UIImageView *pollutedWaterView;
+
 @property (nonatomic, strong) UIView *container;
+
 @property (weak, nonatomic) IBOutlet UILabel *budgetLabel;
 @property (nonatomic) int budgetCount;
 @property (nonatomic) int swapBiofilter; // 0 = leaf; 1 = sprout;
 @property (nonatomic, strong) UIImageView *rainEffectView;
 @property (weak, nonatomic) IBOutlet UIButton *biofilterButtonLabel;
 @property (nonatomic, strong) NSMutableArray *locations;
+
+@property (nonatomic, strong) UIImageView *messageView;
+@property (nonatomic, strong) NSMutableArray *myArray;
+@property (nonatomic, assign) int messageIndex;
 
 - (IBAction)resetButton:(UIButton *)sender;
 - (IBAction)biofilterButton:(UIButton *)sender;
@@ -47,12 +56,21 @@
     return _cityImage;
 }
 
-- (UIImageView *)rainEffectView
+- (UIImageView *)cityViewMask
 {
-    if (!_rainEffectView) {
-        _rainEffectView = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"Rain Effect"]];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
+    
+    if (!_cityViewMask) {
+ 
+        if (screenHeight < RO_HEIGHT_IPHONE4) {
+            _cityViewMask = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"iPhone 3 mask"]];
+        
+        } else if (screenHeight >= RO_HEIGHT_IPHONE4) {
+            _cityViewMask = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"iPhone 4 mask"]];
+        }
     }
-    return _rainEffectView;
+    return _cityViewMask;
 }
 
 - (UIImage *)biofilterImageLeaf
@@ -101,11 +119,49 @@
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:RO_K_BEEN_HERE];
 }
 
+
+- (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (self.messageIndex < self.myArray.count) {
+        self.messageView.image = self.myArray[self.messageIndex++];
+    } else {
+    self.messageView.hidden = YES;
+    }
+}
+
+
+// Pop up messages for instructions
 - (void)messages
 {
+    self.messageIndex = 0;
+    self.messageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.messageView.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+    doubleTap.numberOfTapsRequired = 2;
+    
+    [self.messageView addGestureRecognizer:doubleTap];
+    
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    // Different images for different screen sizes
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
+    
+    if (screenHeight >= RO_HEIGHT_IPHONE4) {
+        for (NSString *name in RO_MESSAGE_IMAGE_NAME_ARRAY_IPHONE4) {
+            NSLog(@"within iPhone4 for loop");
+            [array addObject:[UIImage imageNamed:name]];
+        }
+    
+    } else if (screenHeight < RO_HEIGHT_IPHONE4) {
+        for (NSString *name in RO_MESSAGE_IMAGE_NAME_ARRAY_IPHONE3) {
+            [array addObject:[UIImage imageNamed:name]];
+        }
+    }
+    self.myArray = [array copy];
+    self.messageView.image = self.myArray[self.messageIndex++];
     NSLog(@"This is after messages");
-
-        // code for pop up here
 }
 
 
@@ -134,6 +190,8 @@
     // 320 = height of image (square)
     self.container = [[UIView alloc] initWithFrame:self.cityImageView.frame];
     
+    NSLog(@"The height of cityImage is %f", self.cityImageView.frame.size.height);
+    
     self.cityArrowGrid = [UIImage imageNamed:@"ArrowGrid1"];
     self.cityArrowGridView = [[UIImageView alloc] initWithImage:self.cityArrowGrid];
     self.cityArrowGridView.frame = CGRectMake(0, 0, self.scrollViewCityGrid.bounds.size.width, self.scrollViewCityGrid.bounds.size.width);
@@ -143,14 +201,20 @@
     self.pollutedWaterView = [[UIImageView alloc] initWithImage:self.pollutedWater];
     self.pollutedWaterView.frame = self.cityImageView.frame;
     
+    self.rainEffectView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Rain Effect"]];
+    
     [self.scrollViewCityGrid addSubview:self.container];
     [self.container addSubview:self.cityImageView];
-    [self.container addSubview:self.cityArrowGridView];
     [self.container addSubview:self.pollutedWaterView];
+    [self.container addSubview:self.cityArrowGridView];
+    [self.container addSubview:self.rainEffectView];
+    [self.container addSubview:self.cityViewMask];
+    // This masks the rain animation that is larger than citygrid
     
     // Hides top layer, arrowGrid, polluted water, displays cityImage
     self.cityArrowGridView.hidden = YES;
     self.pollutedWaterView.hidden = YES;
+    self.rainEffectView.hidden = YES;
     self.scrollViewCityGrid.contentSize = self.container.bounds.size;
     
     self.scrollViewCityGrid.minimumZoomScale = 1.0;
@@ -170,8 +234,10 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:RO_K_BEEN_HERE]);
-    if (![[[prefs dictionaryRepresentation] allKeys] containsObject:RO_K_BEEN_HERE]) {
+//    if (![[[prefs dictionaryRepresentation] allKeys] containsObject:RO_K_BEEN_HERE]) {
+    if ([[[prefs dictionaryRepresentation] allKeys] containsObject:RO_K_BEEN_HERE] == 0) {
         [self messages];    // Calls instruction messages only on first visit
+        [self.view addSubview:self.messageView];
         NSLog(@"first visit, displaying messages");
         [self setBeenHere:YES];
         NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:RO_K_BEEN_HERE]);
@@ -199,11 +265,16 @@
     
     // Adds cityImageView back
     [self.container addSubview:self.cityImageView];
-    [self.container addSubview:self.cityArrowGridView];
     [self.container addSubview:self.pollutedWaterView];
+    [self.container addSubview:self.cityArrowGridView];
+    [self.container addSubview:self.rainEffectView];
+    [self.container addSubview:self.cityViewMask];
+    // This masks the rain animation that is larger than citygrid
     
     //Reset Water Color
     self.pollutedWaterView.hidden = YES;
+    self.rainEffectView.hidden = YES;
+    self.cityArrowGridView.hidden = YES;
   
     
     // Reset all grades and locations
@@ -257,7 +328,6 @@
     
     self.rainEffectView.hidden = NO;
     
-    [self.container addSubview:self.rainEffectView];
     self.rainEffectView.center = self.cityImageView.frame.origin;
     // wants bottom right corner of rainEffect to origin
     

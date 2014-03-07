@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="KQU-w1-UVN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="KQU-w1-UVN">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
@@ -66,7 +66,7 @@
                     <navigationItem key="navigationItem" id="aLG-iL-WKn"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="3" numberOfTouchesRequired="3" id="bKf-5q-N3J">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="3" id="bKf-5q-N3J">
                     <connections>
                         <action selector="resetNSUserDefaults:" destination="vXZ-lx-hvc" id="QLB-VY-AaX"/>
                     </connections>
@@ -86,32 +86,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F6H-gj-EyS">
-                                <rect key="frame" x="20" y="246" width="101" height="100"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="ZKk-OR-VQQ"/>
-                                    <constraint firstAttribute="width" constant="101" id="p2s-Gz-k9D"/>
-                                </constraints>
-                                <state key="normal" backgroundImage="City1">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="City1:" destination="alS-pt-dC8" eventType="touchUpInside" id="qim-4T-GlQ"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cG6-vI-Bsw">
-                                <rect key="frame" x="20" y="371" width="101" height="100"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <state key="normal" title="City 2 button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="City1:" destination="alS-pt-dC8" eventType="touchUpInside" id="BWb-x5-Lba"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a city:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rlF-WY-LkK">
                                 <rect key="frame" x="42" y="89" width="236" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -119,30 +93,10 @@
                                 <color key="textColor" red="0.0" green="0.25098040699958801" blue="0.50196081399917603" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" text="Description of city 1" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWN-k0-Ahv">
-                                <rect key="frame" x="135" y="246" width="165" height="100"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="Fve-6Q-Det"/>
-                                    <constraint firstAttribute="width" constant="165" id="ThS-Jj-h4e"/>
-                                </constraints>
-                                <color key="textColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" text="Description of city 2" translatesAutoresizingMaskIntoConstraints="NO" id="eMP-cQ-50Y">
-                                <rect key="frame" x="135" y="371" width="165" height="100"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
-                                <color key="textColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="109" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ENe-49-oPc">
                                 <rect key="frame" x="0.0" y="145" width="320" height="421"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RunoffCell" rowHeight="109" id="lfg-An-7gg" customClass="RunoffCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="109"/>
@@ -178,27 +132,12 @@
                         </subviews>
                         <color key="backgroundColor" red="0.85098046064376831" green="0.93725496530532837" blue="0.90196084976196289" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
-                            <constraint firstItem="F6H-gj-EyS" firstAttribute="top" secondItem="rlF-WY-LkK" secondAttribute="bottom" constant="25" id="0jd-ol-ZnQ"/>
-                            <constraint firstItem="eMP-cQ-50Y" firstAttribute="centerY" secondItem="cG6-vI-Bsw" secondAttribute="centerY" id="3b3-5h-RH8"/>
-                            <constraint firstItem="eMP-cQ-50Y" firstAttribute="centerX" secondItem="tWN-k0-Ahv" secondAttribute="centerX" id="4Sz-0L-Xqu"/>
-                            <constraint firstItem="cG6-vI-Bsw" firstAttribute="width" secondItem="F6H-gj-EyS" secondAttribute="width" id="54n-i9-s6U"/>
-                            <constraint firstItem="F6H-gj-EyS" firstAttribute="leading" secondItem="yTL-He-otp" secondAttribute="leading" constant="20" symbolic="YES" id="8rV-m4-ydo"/>
                             <constraint firstItem="rlF-WY-LkK" firstAttribute="top" secondItem="vXS-Gh-745" secondAttribute="bottom" constant="25" id="A4T-lK-sh9"/>
                             <constraint firstItem="NTJ-sC-VFk" firstAttribute="top" secondItem="ENe-49-oPc" secondAttribute="bottom" constant="2" id="AQh-mv-gkC"/>
-                            <constraint firstItem="eMP-cQ-50Y" firstAttribute="height" secondItem="cG6-vI-Bsw" secondAttribute="height" id="BZx-gn-ATD"/>
-                            <constraint firstAttribute="trailing" secondItem="tWN-k0-Ahv" secondAttribute="trailing" constant="20" symbolic="YES" id="CPe-o7-CmS"/>
-                            <constraint firstItem="tWN-k0-Ahv" firstAttribute="leading" secondItem="F6H-gj-EyS" secondAttribute="trailing" constant="14" id="EL7-g5-IAD"/>
-                            <constraint firstItem="eMP-cQ-50Y" firstAttribute="width" secondItem="tWN-k0-Ahv" secondAttribute="width" id="Er1-lH-pfa"/>
                             <constraint firstAttribute="trailing" secondItem="ENe-49-oPc" secondAttribute="trailing" id="KZb-3G-cjr"/>
                             <constraint firstItem="ENe-49-oPc" firstAttribute="top" secondItem="rlF-WY-LkK" secondAttribute="bottom" constant="8" symbolic="YES" id="TWx-9g-gMK"/>
-                            <constraint firstItem="cG6-vI-Bsw" firstAttribute="leading" secondItem="yTL-He-otp" secondAttribute="leading" constant="20" symbolic="YES" id="UL0-3g-hTX"/>
                             <constraint firstItem="ENe-49-oPc" firstAttribute="leading" secondItem="yTL-He-otp" secondAttribute="leading" id="VgZ-0K-q2k"/>
-                            <constraint firstItem="cG6-vI-Bsw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yTL-He-otp" secondAttribute="leading" constant="15" id="Yj6-S8-SS5"/>
-                            <constraint firstItem="cG6-vI-Bsw" firstAttribute="top" secondItem="F6H-gj-EyS" secondAttribute="bottom" constant="25" id="ezr-H0-Bc3"/>
-                            <constraint firstItem="F6H-gj-EyS" firstAttribute="height" secondItem="tWN-k0-Ahv" secondAttribute="height" id="mKu-TC-pCo"/>
                             <constraint firstAttribute="centerX" secondItem="rlF-WY-LkK" secondAttribute="centerX" id="rDD-YG-HAu"/>
-                            <constraint firstItem="F6H-gj-EyS" firstAttribute="top" secondItem="tWN-k0-Ahv" secondAttribute="top" id="t0s-uE-CDy"/>
-                            <constraint firstItem="cG6-vI-Bsw" firstAttribute="height" secondItem="F6H-gj-EyS" secondAttribute="height" id="yYe-F4-cJy"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="WeZ-Qd-6SI"/>
@@ -363,7 +302,6 @@
     <resources>
         <image name="Arrows" width="100" height="100"/>
         <image name="ButtonImageLeaf" width="200" height="200"/>
-        <image name="City1" width="2400" height="2400"/>
         <image name="EiE Logo_small" width="957" height="365"/>
         <image name="Rain" width="100" height="100"/>
         <image name="Reset" width="100" height="100"/>
