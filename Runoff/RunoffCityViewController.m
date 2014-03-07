@@ -17,20 +17,27 @@
 @property (nonatomic, strong) UIImage *cityArrowGrid;
 @property (nonatomic, strong) UIImageView *cityArrowGridView;
 @property (nonatomic, strong) UIImageView *cityViewMask;
-@property (nonatomic, strong) UIImageView *messageReset;
+
 @property (nonatomic, strong) UIImage *biofilterImageLeaf;
 @property (nonatomic, strong) UIImage *biofilterImageSprout;
 @property (nonatomic, strong) UIImage *biofilterButtonImageLeaf;
 @property (nonatomic, strong) UIImage *biofilterButtonImageSprout;
+
 @property (nonatomic, strong) UIImage *pollutedWater;
 @property (nonatomic, strong) UIImageView *pollutedWaterView;
+
 @property (nonatomic, strong) UIView *container;
+
 @property (weak, nonatomic) IBOutlet UILabel *budgetLabel;
 @property (nonatomic) int budgetCount;
 @property (nonatomic) int swapBiofilter; // 0 = leaf; 1 = sprout;
 @property (nonatomic, strong) UIImageView *rainEffectView;
 @property (weak, nonatomic) IBOutlet UIButton *biofilterButtonLabel;
 @property (nonatomic, strong) NSMutableArray *locations;
+
+@property (nonatomic, strong) UIImageView *messageView;
+@property (nonatomic, strong) NSMutableArray *myArray;
+@property (nonatomic, assign) int messageIndex;
 
 - (IBAction)resetButton:(UIButton *)sender;
 - (IBAction)biofilterButton:(UIButton *)sender;
@@ -112,11 +119,49 @@
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:RO_K_BEEN_HERE];
 }
 
+
+- (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (self.messageIndex < self.myArray.count) {
+        self.messageView.image = self.myArray[self.messageIndex++];
+    } else {
+    self.messageView.hidden = YES;
+    }
+}
+
+
+// Pop up messages for instructions
 - (void)messages
 {
+    self.messageIndex = 0;
+    self.messageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.messageView.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+    doubleTap.numberOfTapsRequired = 2;
+    
+    [self.messageView addGestureRecognizer:doubleTap];
+    
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    // Different images for different screen sizes
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
+    
+    if (screenHeight >= RO_HEIGHT_IPHONE4) {
+        for (NSString *name in RO_MESSAGE_IMAGE_NAME_ARRAY_IPHONE4) {
+            NSLog(@"within iPhone4 for loop");
+            [array addObject:[UIImage imageNamed:name]];
+        }
+    
+    } else if (screenHeight < RO_HEIGHT_IPHONE4) {
+        for (NSString *name in RO_MESSAGE_IMAGE_NAME_ARRAY_IPHONE3) {
+            [array addObject:[UIImage imageNamed:name]];
+        }
+    }
+    self.myArray = [array copy];
+    self.messageView.image = self.myArray[self.messageIndex++];
     NSLog(@"This is after messages");
-    self.messageReset = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"iPhone4 Reset"]];
-        // code for pop up here
 }
 
 
@@ -189,8 +234,10 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:RO_K_BEEN_HERE]);
-    if (![[[prefs dictionaryRepresentation] allKeys] containsObject:RO_K_BEEN_HERE]) {
+//    if (![[[prefs dictionaryRepresentation] allKeys] containsObject:RO_K_BEEN_HERE]) {
+    if ([[[prefs dictionaryRepresentation] allKeys] containsObject:RO_K_BEEN_HERE] == 0) {
         [self messages];    // Calls instruction messages only on first visit
+        [self.view addSubview:self.messageView];
         NSLog(@"first visit, displaying messages");
         [self setBeenHere:YES];
         NSLog(@"Have we been here: %d", [[NSUserDefaults standardUserDefaults] boolForKey:RO_K_BEEN_HERE]);

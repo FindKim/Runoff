@@ -66,7 +66,7 @@
                     <navigationItem key="navigationItem" id="aLG-iL-WKn"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="3" numberOfTouchesRequired="2" id="bKf-5q-N3J">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="3" id="bKf-5q-N3J">
                     <connections>
                         <action selector="resetNSUserDefaults:" destination="vXZ-lx-hvc" id="QLB-VY-AaX"/>
                     </connections>
